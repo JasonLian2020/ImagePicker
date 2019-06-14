@@ -8,6 +8,7 @@
         <activity
             android:name=".ui.ImagePickerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/ImagePicker.AppTheme" />
     </application>
 </manifest>

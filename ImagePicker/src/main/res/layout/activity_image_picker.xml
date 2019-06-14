@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
     <!--标题-->
     <FrameLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="40dp"
+        android:background="@color/image_picker_colorPrimary">
 
         <ImageView
             android:id="@+id/titleClose"

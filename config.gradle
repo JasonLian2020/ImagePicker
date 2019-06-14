@@ -38,6 +38,9 @@ ext {
             "circleImageView"          : "de.hdodenhof:circleimageview:2.2.0",
             "BRVAH"                    : "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.45",
 
+            //utils
+            "utilcode"                 : "com.blankj:utilcode:1.23.7",
+
             //tools
             "dagger2"                  : "com.google.dagger:dagger:${version["dagger2SdkVersion"]}",
             "dagger2-android"          : "com.google.dagger:dagger-android:${version["dagger2SdkVersion"]}",

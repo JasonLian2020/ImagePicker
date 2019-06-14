@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="ImagePicker.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/image_picker_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/image_picker_colorPrimary</item>
+        <item name="colorAccent">@color/image_picker_colorAccent</item>
+    </style>
+
     <style name="Popup.Zhihu" parent="Widget.AppCompat.Light.ListPopupWindow">
         <item name="android:popupBackground">#FFFFFF</item>
     </style>

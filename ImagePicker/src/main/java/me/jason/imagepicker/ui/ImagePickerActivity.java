@@ -1,15 +1,19 @@
 package me.jason.imagepicker.ui;
 
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+
+import com.blankj.utilcode.util.BarUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,15 @@ public class ImagePickerActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_picker);
+        int statusBarColor;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            statusBarColor = getResources().getColor(R.color.image_picker_colorPrimary);
+            BarUtils.setStatusBarLightMode(this, true);
+        } else {
+            statusBarColor = getResources().getColor(R.color.image_picker_colorPrimary_compatibility);
+        }
+        //状态栏颜色
+        BarUtils.setStatusBarColor(this, statusBarColor);
 
         //选择弹窗初始化
         mAlbumsAdapter = new AlbumsAdapter(this, null);
@@ -71,10 +84,10 @@ public class ImagePickerActivity extends AppCompatActivity {
                 Log.d("jason", "onAlbumReset");
                 // Reset List is null
                 if (ThreadUtils.isMainThread()) {
-                    mAlbumsAdapter.setAlbumList(null);
+                    updateUIByReset();
                 } else {
                     Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(() -> mAlbumsAdapter.setAlbumList(null));
+                    handler.post(() -> updateUIByReset());
                 }
             }
         });
@@ -120,7 +133,7 @@ public class ImagePickerActivity extends AppCompatActivity {
             album.addCaptureCount();
         }
         // 更新对应相册下的Fragment
-        onAlbumSelected(album);
+        updateAlbumSelected(album);
     }
 
     private void updateUIBySelect(int position) {
@@ -131,10 +144,18 @@ public class ImagePickerActivity extends AppCompatActivity {
         // 获取当前选中的相册
         Album album = albumList.get(position);
         // 更新对应相册下的Fragment
-        onAlbumSelected(album);
+        updateAlbumSelected(album);
     }
 
-    private void onAlbumSelected(Album album) {
-        //TODO:
+    private void updateUIByReset() {
+        mAlbumsAdapter.setAlbumList(null);
+    }
+
+    private void updateAlbumSelected(Album album) {
+        Fragment fragment = ImagePickerFragment.newInstance(album);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment, ImagePickerFragment.class.getSimpleName())
+                .commitAllowingStateLoss();
     }
 }
