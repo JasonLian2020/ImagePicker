@@ -22,6 +22,7 @@ import me.jason.imagepicker.R;
 import me.jason.imagepicker.internal.entity.Album;
 import me.jason.imagepicker.internal.entity.SelectionSpec;
 import me.jason.imagepicker.internal.model.AlbumCollection;
+import me.jason.imagepicker.internal.model.SelectedItemCollection;
 import me.jason.imagepicker.ui.adapter.AlbumsAdapter;
 import me.jason.imagepicker.ui.widget.AlbumsSpinner;
 import me.jason.imagepicker.utils.ThreadUtils;
@@ -45,6 +46,9 @@ public class ImagePickerActivity extends AppCompatActivity {
         }
         //状态栏颜色
         BarUtils.setStatusBarColor(this, statusBarColor);
+
+        //选中数据集合
+        SelectedItemCollection.getInstance().onCreate(this, savedInstanceState);
 
         //选择弹窗初始化
         mAlbumsAdapter = new AlbumsAdapter(this, null);
@@ -98,12 +102,14 @@ public class ImagePickerActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
+        SelectedItemCollection.getInstance().onSaveInstanceState(outState);
         mAlbumCollection.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        SelectedItemCollection.getInstance().onDestroy();
         mAlbumCollection.onDestroy();
     }
 
