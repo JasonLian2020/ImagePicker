@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 
 import com.blankj.utilcode.util.BarUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import me.jason.imagepicker.R;
@@ -26,6 +25,7 @@ import me.jason.imagepicker.internal.model.AlbumCollection;
 import me.jason.imagepicker.internal.model.SelectedItemCollection;
 import me.jason.imagepicker.ui.adapter.AlbumsAdapter;
 import me.jason.imagepicker.ui.widget.AlbumsSpinner;
+import me.jason.imagepicker.utils.CursorUtils;
 import me.jason.imagepicker.utils.ThreadUtils;
 
 public class ImagePickerActivity extends AppCompatActivity {
@@ -80,7 +80,7 @@ public class ImagePickerActivity extends AppCompatActivity {
             @Override
             public void onAlbumLoad(Cursor cursor) {
                 Log.d("jason", ImagePickerActivity.class.getSimpleName() + ": onAlbumLoad");
-                List<Album> albumList = getAllAlbum(cursor);
+                List<Album> albumList = CursorUtils.getAllAlbum(cursor);
                 // select default album.
                 if (ThreadUtils.isMainThread()) {
                     updateUIByInit(albumList);
@@ -132,18 +132,6 @@ public class ImagePickerActivity extends AppCompatActivity {
                 //TODO:
                 break;
         }
-    }
-
-    private List<Album> getAllAlbum(Cursor cursor) {
-        List<Album> albumList = null;
-        if (cursor != null) {
-            albumList = new ArrayList<>();
-            while (cursor.moveToNext()) {
-                Album album = Album.valueOf(cursor);
-                albumList.add(album);
-            }
-        }
-        return albumList;
     }
 
     private void updateUIByInit(List<Album> albumList) {

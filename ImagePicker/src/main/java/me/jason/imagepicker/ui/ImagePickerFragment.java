@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.ToastUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import me.jason.imagepicker.R;
@@ -27,6 +26,7 @@ import me.jason.imagepicker.internal.model.AlbumMediaCollection;
 import me.jason.imagepicker.internal.model.SelectedItemCollection;
 import me.jason.imagepicker.ui.adapter.AlbumMeidaAdapter;
 import me.jason.imagepicker.ui.widget.MediaGridInset;
+import me.jason.imagepicker.utils.CursorUtils;
 import me.jason.imagepicker.utils.ThreadUtils;
 
 public class ImagePickerFragment extends Fragment {
@@ -69,7 +69,7 @@ public class ImagePickerFragment extends Fragment {
             @Override
             public void onAlbumMediaLoad(Cursor cursor) {
                 Log.d("jason", ImagePickerFragment.class.getSimpleName() + ": onAlbumMediaLoad");
-                List<Item> itemList = getAllItem(cursor);
+                List<Item> itemList = CursorUtils.getAllItem(cursor);
                 if (ThreadUtils.isMainThread()) {
                     updateUIByInit(itemList);
                 } else {
@@ -126,18 +126,6 @@ public class ImagePickerFragment extends Fragment {
             }
         });
         mAdapter.bindToRecyclerView(recyclerview);
-    }
-
-    private List<Item> getAllItem(Cursor cursor) {
-        List<Item> itemList = null;
-        if (cursor != null) {
-            itemList = new ArrayList<>();
-            while (cursor.moveToNext()) {
-                Item album = Item.valueOf(cursor);
-                itemList.add(album);
-            }
-        }
-        return itemList;
     }
 
     private void updateUIByInit(List<Item> itemList) {
