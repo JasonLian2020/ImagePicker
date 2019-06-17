@@ -29,7 +29,7 @@ import me.jason.imagepicker.utils.Platform;
 
 public class AlbumsSpinner {
 
-    private static final int MAX_SHOWN_COUNT = 6;
+    private static final int MAX_SHOWN_COUNT = 4;
     private BaseAdapter mAdapter;
     private TextView mSelected;
     private ListPopupWindow mListPopupWindow;
@@ -42,11 +42,7 @@ public class AlbumsSpinner {
     public AlbumsSpinner(@NonNull Context context) {
         mListPopupWindow = new ListPopupWindow(context, null, 0, R.style.Popup_Zhihu);
         mListPopupWindow.setModal(true);
-        float density = context.getResources().getDisplayMetrics().density;
-        mListPopupWindow.setContentWidth((int) (216 * density));
-        mListPopupWindow.setHorizontalOffset((int) (16 * density));
-        mListPopupWindow.setVerticalOffset((int) (-48 * density));
-
+        mListPopupWindow.setContentWidth(ListPopupWindow.MATCH_PARENT);
         mListPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
             if (curPosition == position) {
                 // 如果显示就隐藏
