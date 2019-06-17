@@ -34,6 +34,10 @@ public class AlbumsSpinner {
     private TextView mSelected;
     private ListPopupWindow mListPopupWindow;
     private AdapterView.OnItemSelectedListener mOnItemSelectedListener;
+    /**
+     * 记录当前位置
+     */
+    private int curPosition;
 
     public AlbumsSpinner(@NonNull Context context) {
         mListPopupWindow = new ListPopupWindow(context, null, 0, R.style.Popup_Zhihu);
@@ -44,6 +48,12 @@ public class AlbumsSpinner {
         mListPopupWindow.setVerticalOffset((int) (-48 * density));
 
         mListPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
+            if (curPosition == position) {
+                // 如果显示就隐藏
+                if (mListPopupWindow.isShowing()) mListPopupWindow.dismiss();
+                return;
+            }
+            curPosition = position;
             onItemSelected(parent.getContext(), position);
             if (mOnItemSelectedListener != null) {
                 mOnItemSelectedListener.onItemSelected(parent, view, position, id);
@@ -56,6 +66,7 @@ public class AlbumsSpinner {
     }
 
     public void setSelection(Context context, int position) {
+        curPosition = position;
         mListPopupWindow.setSelection(position);
         onItemSelected(context, position);
     }
