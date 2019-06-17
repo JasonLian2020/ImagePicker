@@ -145,6 +145,8 @@ public class ImagePickerActivity extends AppCompatActivity {
     private void updateUIBySelect(int position) {
         // 更新当前选中位置
         mAlbumCollection.setStateCurrentSelection(position);
+        // 每次切换，需要重置选中数据
+        SelectedItemCollection.getInstance().reset();
         // 获取列表集合
         List<Album> albumList = mAlbumsAdapter.getAlbumList();
         // 获取当前选中的相册

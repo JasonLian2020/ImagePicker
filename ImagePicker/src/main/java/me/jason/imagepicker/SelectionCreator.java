@@ -88,6 +88,20 @@ public final class SelectionCreator {
         mSelectionSpec.orientation = SCREEN_ORIENTATION_UNSPECIFIED;
     }
 
+    public SelectionCreator maxSelectable(int maxSelectable) {
+        if (maxSelectable < 1)
+            throw new IllegalArgumentException("maxSelectable must be greater than or equal to one");
+        if (mSelectionSpec.maxImageSelectable > 0 || mSelectionSpec.maxVideoSelectable > 0)
+            throw new IllegalStateException("already set maxImageSelectable and maxVideoSelectable");
+        mSelectionSpec.maxSelectable = maxSelectable;
+        return this;
+    }
+
+    public SelectionCreator capture(boolean enable) {
+        mSelectionSpec.capture = enable;
+        return this;
+    }
+
     public SelectionCreator imageEngine(ImageEngine imageEngine) {
         mSelectionSpec.imageEngine = imageEngine;
         return this;

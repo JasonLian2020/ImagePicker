@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.util.ToastUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ import me.jason.imagepicker.internal.entity.Album;
 import me.jason.imagepicker.internal.entity.Item;
 import me.jason.imagepicker.internal.entity.SelectionSpec;
 import me.jason.imagepicker.internal.model.AlbumMediaCollection;
+import me.jason.imagepicker.internal.model.SelectedItemCollection;
 import me.jason.imagepicker.ui.adapter.AlbumMeidaAdapter;
 import me.jason.imagepicker.ui.widget.MediaGridInset;
 import me.jason.imagepicker.utils.ThreadUtils;
@@ -108,6 +111,25 @@ public class ImagePickerFragment extends Fragment {
         recyclerview.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         recyclerview.addItemDecoration(new MediaGridInset(spanCount, spacing, false));
         mAdapter = new AlbumMeidaAdapter(null);
+        mAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            Item item = (Item) adapter.getItem(position);
+            if (item == null) return;
+            if (view.getId() == R.id.mediaChoose) {
+                // 处理选中和取消选中
+                if (view.isSelected()) {
+                    mAdapter.removeItemFromList(item, position);
+                } else {
+                    int count = SelectedItemCollection.getInstance().count();
+                    int maxSelectable = SelectionSpec.getInstance().maxSelectable;
+                    if (count >= maxSelectable) {
+                        //不能再选，已经达到限制了
+                        ToastUtils.showShort(R.string.error_over_count, count);
+                    } else {
+                        mAdapter.addItemToList(item, position);
+                    }
+                }
+            }
+        });
         mAdapter.bindToRecyclerView(recyclerview);
     }
 

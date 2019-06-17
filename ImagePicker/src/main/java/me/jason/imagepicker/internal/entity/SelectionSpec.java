@@ -69,7 +69,7 @@ public final class SelectionSpec {
         showSingleMediaType = false;
         orientation = 0;
         countable = false;
-        maxSelectable = 1;
+        maxSelectable = 9;
         maxImageSelectable = 0;
         maxVideoSelectable = 0;
         filters = null;

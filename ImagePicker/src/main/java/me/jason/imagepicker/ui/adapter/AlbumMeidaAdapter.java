@@ -3,7 +3,9 @@ package me.jason.imagepicker.ui.adapter;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -14,6 +16,7 @@ import java.util.List;
 import me.jason.imagepicker.R;
 import me.jason.imagepicker.internal.entity.Item;
 import me.jason.imagepicker.internal.entity.SelectionSpec;
+import me.jason.imagepicker.internal.model.SelectedItemCollection;
 
 public class AlbumMeidaAdapter extends BaseQuickAdapter<Item, BaseViewHolder> {
     private static final int ITEM_MEDIA = 0;
@@ -33,6 +36,16 @@ public class AlbumMeidaAdapter extends BaseQuickAdapter<Item, BaseViewHolder> {
         getMultiTypeDelegate()
                 .registerItemType(ITEM_MEDIA, R.layout.item_media_grid)
                 .registerItemType(ITEM_CAPTURE, R.layout.item_photo_capture);
+    }
+
+    public void addItemToList(Item item, int position) {
+        SelectedItemCollection.getInstance().add(item);
+        notifyDataSetChanged();
+    }
+
+    public void removeItemFromList(Item item, int position) {
+        SelectedItemCollection.getInstance().remove(item);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -55,6 +68,10 @@ public class AlbumMeidaAdapter extends BaseQuickAdapter<Item, BaseViewHolder> {
         } else {
             SelectionSpec.getInstance().imageEngine.loadThumbnail(mContext, getImageResize(), null, mediaCover, item.getContentUri());
         }
+        // choose
+        processChooseStatus(helper, item);
+
+        helper.addOnClickListener(R.id.mediaChoose);
     }
 
     private void handleCapture(BaseViewHolder helper, Item item) {
@@ -72,5 +89,45 @@ public class AlbumMeidaAdapter extends BaseQuickAdapter<Item, BaseViewHolder> {
             mImageResize = (int) (mImageResize * SelectionSpec.getInstance().thumbnailScale);
         }
         return mImageResize;
+    }
+
+    private void processChooseStatus(BaseViewHolder helper, Item item) {
+        TextView mediaChoose = helper.getView(R.id.mediaChoose);
+        ImageView mediaMask = helper.getView(R.id.mediaMask);
+        int count = SelectedItemCollection.getInstance().count();
+        if (count > 0) {
+            // 说明有选择图片
+            if (item.isImage()) {
+                //image
+                mediaChoose.setVisibility(View.VISIBLE);
+                int checkedNum = SelectedItemCollection.getInstance().checkedNumOf(item);
+                if (checkedNum > 0) {
+                    mediaChoose.setSelected(true);
+                    mediaChoose.setText(String.valueOf(checkedNum));
+                    mediaMask.setVisibility(View.GONE);
+                } else {
+                    mediaChoose.setSelected(false);
+                    mediaChoose.setText("");
+                    mediaMask.setVisibility(count >= SelectionSpec.getInstance().maxSelectable ? View.VISIBLE : View.GONE);
+                }
+            } else {
+                //video
+                mediaChoose.setVisibility(View.GONE);
+                mediaMask.setVisibility(View.VISIBLE);
+            }
+        } else {
+            // 说明未选择图片
+            if (item.isImage()) {
+                //image
+                mediaChoose.setVisibility(View.VISIBLE);
+                mediaChoose.setSelected(false);
+                mediaChoose.setText("");
+                mediaMask.setVisibility(View.GONE);
+            } else {
+                //video
+                mediaChoose.setVisibility(View.GONE);
+                mediaMask.setVisibility(View.GONE);
+            }
+        }
     }
 }
