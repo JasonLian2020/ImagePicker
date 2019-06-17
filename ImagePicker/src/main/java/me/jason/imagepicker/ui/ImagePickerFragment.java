@@ -50,7 +50,6 @@ public class ImagePickerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("jason", "onCreate");
         if (getArguments() == null) return;
         album = getArguments().getParcelable(EXTRA_ALBUM);
     }
@@ -58,7 +57,6 @@ public class ImagePickerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("jason", "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_image_picker, container, false);
         initRecyclerView(rootView);
         return rootView;
@@ -67,12 +65,10 @@ public class ImagePickerFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("jason", "onActivityCreated");
-
         mAlbumMediaCollection.onCreate(getActivity(), new AlbumMediaCollection.AlbumMediaCallbacks() {
             @Override
             public void onAlbumMediaLoad(Cursor cursor) {
-                Log.d("jason", "onAlbumMediaLoad");
+                Log.d("jason", ImagePickerFragment.class.getSimpleName() + ": onAlbumMediaLoad");
                 List<Item> itemList = getAllItem(cursor);
                 if (ThreadUtils.isMainThread()) {
                     updateUIByInit(itemList);
@@ -84,7 +80,7 @@ public class ImagePickerFragment extends Fragment {
 
             @Override
             public void onAlbumMediaReset() {
-                Log.d("jason", "onAlbumMediaReset");
+                Log.d("jason", ImagePickerFragment.class.getSimpleName() + ": onAlbumMediaLoad");
                 if (ThreadUtils.isMainThread()) {
                     updateUIByReset();
                 } else {
@@ -99,7 +95,6 @@ public class ImagePickerFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("jason", "onDestroy");
         mAlbumMediaCollection.onDestroy();
     }
 

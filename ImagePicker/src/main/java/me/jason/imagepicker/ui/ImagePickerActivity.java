@@ -1,5 +1,6 @@
 package me.jason.imagepicker.ui;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +30,9 @@ import me.jason.imagepicker.utils.ThreadUtils;
 
 public class ImagePickerActivity extends AppCompatActivity {
     private final AlbumCollection mAlbumCollection = new AlbumCollection();
+
+    public static final int REQUEST_CODE_PREVIEW = 23;
+    public static final int REQUEST_CODE_CAPTURE = 24;
 
     private AlbumsSpinner mAlbumsSpinner;
     private AlbumsAdapter mAlbumsAdapter;
@@ -75,7 +79,7 @@ public class ImagePickerActivity extends AppCompatActivity {
         mAlbumCollection.onCreate(this, new AlbumCollection.AlbumCallbacks() {
             @Override
             public void onAlbumLoad(Cursor cursor) {
-                Log.d("jason", "onAlbumLoad");
+                Log.d("jason", ImagePickerActivity.class.getSimpleName() + ": onAlbumLoad");
                 List<Album> albumList = getAllAlbum(cursor);
                 // select default album.
                 if (ThreadUtils.isMainThread()) {
@@ -88,7 +92,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
             @Override
             public void onAlbumReset() {
-                Log.d("jason", "onAlbumReset");
+                Log.d("jason", ImagePickerActivity.class.getSimpleName() + ": onAlbumReset");
                 // Reset List is null
                 if (ThreadUtils.isMainThread()) {
                     updateUIByReset();
@@ -114,6 +118,20 @@ public class ImagePickerActivity extends AppCompatActivity {
         super.onDestroy();
         SelectedItemCollection.getInstance().onDestroy();
         mAlbumCollection.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) return;
+        switch (requestCode) {
+            case REQUEST_CODE_CAPTURE:
+                //TODO:
+                break;
+            case REQUEST_CODE_PREVIEW:
+                //TODO:
+                break;
+        }
     }
 
     private List<Album> getAllAlbum(Cursor cursor) {
