@@ -125,6 +125,20 @@ public class ImagePickerFragment extends Fragment {
                 }
             }
         });
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            Item item = (Item) adapter.getItem(position);
+            if (item == null) return;
+            if (item.isCapture()) {
+                //拍照
+                ToastUtils.showShort("拍照功能开发中...");
+            } else if (item.isImage()) {
+                //预览照片
+                PreviewItemActivity.startForResult(getActivity(), album, item, ImagePickerActivity.REQUEST_CODE_PREVIEW);
+            } else if (item.isVideo()) {
+                //预览视频
+                ToastUtils.showShort("预览视频功能开发中...");
+            }
+        });
         mAdapter.bindToRecyclerView(recyclerview);
     }
 
