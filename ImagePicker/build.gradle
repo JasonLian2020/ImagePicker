@@ -34,4 +34,5 @@ dependencies {
     implementation rootProject.ext.dependencies["recyclerview-v7"]
     implementation rootProject.ext.dependencies["BRVAH"]
     implementation rootProject.ext.dependencies["utilcode"]
+    implementation rootProject.ext.dependencies["imagezoom"]
 }

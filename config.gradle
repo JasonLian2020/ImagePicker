@@ -37,6 +37,7 @@ ext {
             "roundedImageView"         : "com.makeramen:roundedimageview:2.3.0",
             "circleImageView"          : "de.hdodenhof:circleimageview:2.2.0",
             "BRVAH"                    : "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.45",
+            "imagezoom"                : "it.sephiroth.android.library.imagezoom:library:1.0.4",
 
             //utils
             "utilcode"                 : "com.blankj:utilcode:1.23.7",
