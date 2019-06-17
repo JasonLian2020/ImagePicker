@@ -49,6 +49,9 @@ public class ImagePickerActivity extends AppCompatActivity {
 
         //选中数据集合
         SelectedItemCollection.getInstance().onCreate(this, savedInstanceState);
+        SelectedItemCollection.getInstance().setOnSelectChanageListener(items -> {
+            //TODO:
+        });
 
         //选择弹窗初始化
         mAlbumsAdapter = new AlbumsAdapter(this, null);

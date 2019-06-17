@@ -48,7 +48,7 @@ public class SelectedItemCollection {
     }
 
     public void onDestroy() {
-        //TODO:
+        onSelectChanageListener = null;
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -61,11 +61,17 @@ public class SelectedItemCollection {
 
     public boolean add(Item item) {
         boolean added = mItems.add(item);
+        // 数据发生变化，就回调
+        if (onSelectChanageListener != null)
+            onSelectChanageListener.onUpdate(asList());
         return added;
     }
 
     public boolean remove(Item item) {
         boolean removed = mItems.remove(item);
+        // 数据发生变化，就回调
+        if (onSelectChanageListener != null)
+            onSelectChanageListener.onUpdate(asList());
         return removed;
     }
 
@@ -106,5 +112,15 @@ public class SelectedItemCollection {
     public int checkedNumOf(Item item) {
         int index = new ArrayList<>(mItems).indexOf(item);
         return index == -1 ? UNCHECKED : index + 1;
+    }
+
+    private OnSelectChanageListener onSelectChanageListener;
+
+    public void setOnSelectChanageListener(OnSelectChanageListener onSelectChanageListener) {
+        this.onSelectChanageListener = onSelectChanageListener;
+    }
+
+    public interface OnSelectChanageListener {
+        void onUpdate(List<Item> items);
     }
 }
