@@ -3,6 +3,7 @@ package me.jason.imagepicker.ui.adapter;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -68,9 +69,11 @@ public class AlbumMeidaAdapter extends BaseQuickAdapter<Item, BaseViewHolder> {
         } else {
             SelectionSpec.getInstance().imageEngine.loadThumbnail(mContext, getImageResize(), null, mediaCover, item.getContentUri());
         }
+        // time
+        helper.setText(R.id.mediaTime, item.isVideo() ? DateUtils.formatElapsedTime(item.duration / 1000) : "");
         // choose
         processChooseStatus(helper, item);
-
+        // listener
         helper.addOnClickListener(R.id.mediaChoose);
     }
 
