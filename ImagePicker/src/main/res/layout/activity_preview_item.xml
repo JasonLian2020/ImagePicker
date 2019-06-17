@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <me.jason.imagepicker.ui.widget.PreviewViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black" />
+
+    <!--控制面板-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--顶部-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#66000000">
+
+            <FrameLayout
+                android:id="@+id/previewTopLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/title_layout_height">
+
+                <ImageView
+                    android:id="@+id/previewClose"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:scaleType="center"
+                    android:src="@drawable/public_icon_close_white" />
+
+                <TextView
+                    android:id="@+id/previewChoose"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/preview_bg_choose_selector"
+                    android:gravity="center"
+                    android:textColor="@android:color/white" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/previewVideoTips"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_below="@id/previewTopLayout"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="center_vertical"
+                android:text="选择图片时，不能选择视频"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
+
+        <!--底部-->
+        <RelativeLayout
+            android:id="@+id/previewBottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <!--Image-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+
+            <Button
+                android:id="@+id/previewImageCompleted"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/recyclerView"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="完成" />
+
+            <!--Video-->
+            <LinearLayout
+                android:id="@+id/previewVideoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/previewVideoCompleted"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/previewVideoLayout"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="完成" />
+        </RelativeLayout>
+    </FrameLayout>
+</FrameLayout>

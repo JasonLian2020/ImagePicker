@@ -8,6 +8,10 @@
         <item name="colorAccent">@color/image_picker_colorAccent</item>
     </style>
 
+    <style name="PreviewItem.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="Popup.Zhihu" parent="Widget.AppCompat.Light.ListPopupWindow">
         <item name="android:popupBackground">#FFFFFF</item>
     </style>
