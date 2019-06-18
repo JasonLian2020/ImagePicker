@@ -208,6 +208,8 @@ public class ImagePickerActivity extends AppCompatActivity {
         }
         // 更新对应相册下的Fragment
         updateAlbumSelected(album);
+        // 用完就释放掉
+        mAlbumCollection.onDestroy();
     }
 
     private void updateUIBySelect(int position) {
