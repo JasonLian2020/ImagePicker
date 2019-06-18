@@ -72,6 +72,13 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
         intent.putExtra(EXTRA_ALBUM, album);
         intent.putExtra(EXTRA_ITEM, item);
         activity.startActivityForResult(intent, RequestCode);
+        activity.overridePendingTransition(R.anim.popup_up_in, R.anim.popup_up_out);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.popup_down_in, R.anim.popup_down_out);
     }
 
     @Override

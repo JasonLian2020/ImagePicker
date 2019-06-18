@@ -38,6 +38,12 @@ public class ImagePickerActivity extends AppCompatActivity {
     private AlbumsAdapter mAlbumsAdapter;
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.popup_down_in, R.anim.popup_down_out);
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_picker);
@@ -50,6 +56,12 @@ public class ImagePickerActivity extends AppCompatActivity {
         }
         //状态栏颜色
         BarUtils.setStatusBarColor(this, statusBarColor);
+
+        //view
+        findViewById(R.id.titleClose).setOnClickListener(v -> onBackPressed());
+        findViewById(R.id.titleNext).setOnClickListener(v -> {
+
+        });
 
         //选中数据集合
         SelectedItemCollection.getInstance().onCreate(this, savedInstanceState);

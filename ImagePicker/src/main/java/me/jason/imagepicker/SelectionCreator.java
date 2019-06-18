@@ -121,6 +121,7 @@ public final class SelectionCreator {
         } else {
             activity.startActivityForResult(intent, requestCode);
         }
+        activity.overridePendingTransition(R.anim.popup_up_in, R.anim.popup_up_out);
     }
 
 }
