@@ -39,16 +39,6 @@ public class AlbumMeidaAdapter extends BaseQuickAdapter<Item, BaseViewHolder> {
                 .registerItemType(ITEM_CAPTURE, R.layout.item_photo_capture);
     }
 
-    public void addItemToList(Item item, int position) {
-        SelectedItemCollection.getInstance().add(item);
-        notifyDataSetChanged();
-    }
-
-    public void removeItemFromList(Item item, int position) {
-        SelectedItemCollection.getInstance().remove(item);
-        notifyDataSetChanged();
-    }
-
     @Override
     protected void convert(BaseViewHolder helper, Item item) {
         switch (helper.getItemViewType()) {

@@ -29,7 +29,7 @@ import me.jason.imagepicker.ui.widget.MediaGridInset;
 import me.jason.imagepicker.utils.CursorUtils;
 import me.jason.imagepicker.utils.ThreadUtils;
 
-public class ImagePickerFragment extends Fragment {
+public class ImagePickerFragment extends Fragment implements SelectedItemCollection.OnItemChanageListener {
     public static final String EXTRA_ALBUM = "extra_album";
 
     private Album album;
@@ -65,6 +65,7 @@ public class ImagePickerFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        SelectedItemCollection.getInstance().addOnItemChanageListener(this);
         mAlbumMediaCollection.onCreate(getActivity(), new AlbumMediaCollection.AlbumMediaCallbacks() {
             @Override
             public void onAlbumMediaLoad(Cursor cursor) {
@@ -95,7 +96,20 @@ public class ImagePickerFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        SelectedItemCollection.getInstance().removeOnItemChanageListener(this);
         mAlbumMediaCollection.onDestroy();
+    }
+
+    @Override
+    public void onAdd(Item item) {
+        // 选中集合，数据发生增加
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRemove(Item item) {
+        // 选中集合，数据发生删除
+        mAdapter.notifyDataSetChanged();
     }
 
     private void initRecyclerView(View rootView) {
@@ -112,7 +126,7 @@ public class ImagePickerFragment extends Fragment {
             if (view.getId() == R.id.mediaChoose) {
                 // 处理选中和取消选中
                 if (view.isSelected()) {
-                    mAdapter.removeItemFromList(item, position);
+                    SelectedItemCollection.getInstance().remove(item);
                 } else {
                     int count = SelectedItemCollection.getInstance().count();
                     int maxSelectable = SelectionSpec.getInstance().maxSelectable;
@@ -120,7 +134,7 @@ public class ImagePickerFragment extends Fragment {
                         //不能再选，已经达到限制了
                         ToastUtils.showShort(R.string.error_over_count, count);
                     } else {
-                        mAdapter.addItemToList(item, position);
+                        SelectedItemCollection.getInstance().add(item);
                     }
                 }
             }
