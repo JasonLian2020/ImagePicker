@@ -150,7 +150,7 @@ public class ImagePickerFragment extends Fragment implements SelectedItemCollect
                 PreviewItemActivity.startForResult(getActivity(), album, item, ImagePickerActivity.REQUEST_CODE_PREVIEW);
             } else if (item.isVideo()) {
                 //预览视频
-                ToastUtils.showShort("预览视频功能开发中...");
+                PreviewItemActivity.startForResult(getActivity(), album, item, ImagePickerActivity.REQUEST_CODE_PREVIEW);
             }
         });
         mAdapter.bindToRecyclerView(recyclerview);

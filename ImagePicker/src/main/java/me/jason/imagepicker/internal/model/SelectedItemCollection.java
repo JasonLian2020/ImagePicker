@@ -78,7 +78,7 @@ public class SelectedItemCollection {
         return removed;
     }
 
-    public List<Item> asList() {
+    public ArrayList<Item> asList() {
         return new ArrayList<>(mItems);
     }
 

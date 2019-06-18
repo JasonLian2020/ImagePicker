@@ -2,6 +2,7 @@ package me.jason.imagepicker.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,17 +17,27 @@ import android.widget.AdapterView;
 
 import com.blankj.utilcode.util.BarUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.jason.imagepicker.R;
 import me.jason.imagepicker.internal.entity.Album;
+import me.jason.imagepicker.internal.entity.Item;
 import me.jason.imagepicker.internal.entity.SelectionSpec;
 import me.jason.imagepicker.internal.model.AlbumCollection;
 import me.jason.imagepicker.internal.model.SelectedItemCollection;
 import me.jason.imagepicker.ui.adapter.AlbumsAdapter;
 import me.jason.imagepicker.ui.widget.AlbumsSpinner;
 import me.jason.imagepicker.utils.CursorUtils;
+import me.jason.imagepicker.utils.PathUtils;
 import me.jason.imagepicker.utils.ThreadUtils;
+
+import static me.jason.imagepicker.IntentHub.EXTRA_RESULT_FROM;
+import static me.jason.imagepicker.IntentHub.EXTRA_RESULT_SELECTED_ITEM;
+import static me.jason.imagepicker.IntentHub.EXTRA_RESULT_SELECTED_PATH;
+import static me.jason.imagepicker.IntentHub.EXTRA_RESULT_SELECTED_URI;
+import static me.jason.imagepicker.IntentHub.FROM_IMAGE;
+import static me.jason.imagepicker.IntentHub.FROM_NONE;
 
 public class ImagePickerActivity extends AppCompatActivity {
     private final AlbumCollection mAlbumCollection = new AlbumCollection();
@@ -59,9 +70,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
         //view
         findViewById(R.id.titleClose).setOnClickListener(v -> onBackPressed());
-        findViewById(R.id.titleNext).setOnClickListener(v -> {
-
-        });
+        findViewById(R.id.titleNext).setOnClickListener(v -> clickNext());
 
         //选中数据集合
         SelectedItemCollection.getInstance().onCreate(this, savedInstanceState);
@@ -141,9 +150,47 @@ public class ImagePickerActivity extends AppCompatActivity {
                 //TODO:
                 break;
             case REQUEST_CODE_PREVIEW:
-                //TODO:
+                if (data == null) return;
+                ArrayList<Item> selectedItems = data.getParcelableArrayListExtra(EXTRA_RESULT_SELECTED_ITEM);
+                int from = data.getIntExtra(EXTRA_RESULT_FROM, FROM_NONE);
+                ArrayList<Uri> selectedUris = new ArrayList<>();
+                ArrayList<String> selectedPaths = new ArrayList<>();
+                if (selectedItems != null) {
+                    for (Item selectedItem : selectedItems) {
+                        selectedUris.add(selectedItem.getContentUri());
+                        selectedPaths.add(PathUtils.getPath(this, selectedItem.getContentUri()));
+                    }
+                }
+                sendResult(selectedUris, selectedPaths, from);
                 break;
         }
+    }
+
+    private void sendResult(ArrayList<Uri> selectedUris, ArrayList<String> selectedPaths, int from) {
+        Intent result = new Intent();
+        result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTED_URI, selectedUris);
+        result.putStringArrayListExtra(EXTRA_RESULT_SELECTED_PATH, selectedPaths);
+        result.putExtra(EXTRA_RESULT_FROM, from);
+        setResult(RESULT_OK, result);
+        finish();
+    }
+
+    private void clickNext() {
+        int count = SelectedItemCollection.getInstance().count();
+        ArrayList<Uri> selectedUris = new ArrayList<>();
+        ArrayList<String> selectedPaths = new ArrayList<>();
+        int from = FROM_NONE;
+        if (count > 0) {
+            ArrayList<Item> selectedItems = SelectedItemCollection.getInstance().asList();
+            if (selectedItems != null) {
+                for (Item selectedItem : selectedItems) {
+                    selectedUris.add(selectedItem.getContentUri());
+                    selectedPaths.add(PathUtils.getPath(this, selectedItem.getContentUri()));
+                }
+            }
+            from = FROM_IMAGE;
+        }
+        sendResult(selectedUris, selectedPaths, from);
     }
 
     private void updateUIByInit(List<Album> albumList) {

@@ -20,8 +20,10 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import me.jason.imagepicker.IntentHub;
 import me.jason.imagepicker.R;
 import me.jason.imagepicker.internal.entity.Album;
 import me.jason.imagepicker.internal.entity.Item;
@@ -221,7 +223,19 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
     }
 
     private void clickImageCompleted() {
-        //TODO:
+        Intent intent = new Intent();
+        int count = SelectedItemCollection.getInstance().count();
+        ArrayList<Item> itemList;
+        if (count > 0) {
+            itemList = SelectedItemCollection.getInstance().asList();
+        } else {
+            itemList = new ArrayList<>();
+            itemList.add(item);
+        }
+        intent.putParcelableArrayListExtra(IntentHub.EXTRA_RESULT_SELECTED_ITEM, itemList);
+        intent.putExtra(IntentHub.EXTRA_RESULT_FROM, IntentHub.FROM_IMAGE);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void clickVideoCompleted() {
