@@ -35,13 +35,13 @@ import me.jason.imagepicker.utils.ThreadUtils;
 
 public class PreviewItemActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
-    public static final String EXTRA_ALBUM = "extra_album";
-    public static final String EXTRA_ITEM = "extra_item";
+    private static final String EXTRA_ALBUM = "extra_album";
+    private static final String EXTRA_ITEM = "extra_item";
 
-    public static final int UPDATE_TYPE_INIT = 1;
-    public static final int UPDATE_TYPE_ADD = 2;
-    public static final int UPDATE_TYPE_REMOVE = 3;
-    public static final int UPDATE_TYPE_SELECT = 4;
+    private static final int UPDATE_TYPE_INIT = 1;
+    private static final int UPDATE_TYPE_ADD = 2;
+    private static final int UPDATE_TYPE_REMOVE = 3;
+    private static final int UPDATE_TYPE_SELECT = 4;
 
     private ViewPager viewPager;
     //top
