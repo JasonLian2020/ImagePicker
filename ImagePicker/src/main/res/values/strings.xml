@@ -16,4 +16,7 @@
 
     <string name="preview_item_video_tips1">选择图片时，不能选择视频</string>
     <string name="preview_item_video_tips2">只支持上传大于%1$d秒的视频哦</string>
+
+    <string name="preview_item_completed_btn_text1">完成</string>
+    <string name="preview_item_completed_btn_text2">完成(%1$d)</string>
 </resources>

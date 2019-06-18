@@ -44,7 +44,7 @@
             </FrameLayout>
 
             <TextView
-                android:id="@+id/previewVideoTips"
+                android:id="@+id/previewTips"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_below="@id/previewTopLayout"
@@ -61,48 +61,50 @@
             android:id="@+id/previewBottomLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
+            android:layout_gravity="bottom"
+            android:background="#66000000">
 
             <!--Image-->
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="80dp" />
+                android:layout_height="80dp"
+                android:paddingEnd="10dp" />
 
             <Button
                 android:id="@+id/previewImageCompleted"
                 android:layout_width="80dp"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_below="@id/recyclerView"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
+                android:background="@drawable/preview_bg_completed_selector"
                 android:gravity="center"
-                android:text="完成" />
+                android:text="@string/preview_item_completed_btn_text1"
+                android:textColor="@android:color/white" />
 
             <!--Video-->
-            <LinearLayout
+            <include
                 android:id="@+id/previewVideoLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-            </LinearLayout>
+                layout="@layout/preview_layout_video_control" />
 
             <Button
                 android:id="@+id/previewVideoCompleted"
                 android:layout_width="80dp"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_below="@id/previewVideoLayout"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
+                android:background="@drawable/preview_bg_completed_selector"
                 android:gravity="center"
-                android:text="完成" />
+                android:text="@string/preview_item_completed_btn_text1"
+                android:textColor="@android:color/white" />
         </RelativeLayout>
     </FrameLayout>
 </FrameLayout>

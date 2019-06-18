@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
     android:orientation="vertical">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/seletedImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/selectMask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/preview_bg_image_selected" />
+</FrameLayout>
