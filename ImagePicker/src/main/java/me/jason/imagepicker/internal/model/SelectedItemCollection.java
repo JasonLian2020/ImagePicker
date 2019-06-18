@@ -49,6 +49,7 @@ public class SelectedItemCollection {
 
     public void onDestroy() {
         onSelectChanageListener = null;
+        clearOnItemChanageListener();
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -62,6 +63,7 @@ public class SelectedItemCollection {
     public boolean add(Item item) {
         boolean added = mItems.add(item);
         // 数据发生变化，就回调
+        notifyAddItem(item);
         if (onSelectChanageListener != null)
             onSelectChanageListener.onUpdate(asList());
         return added;
@@ -70,6 +72,7 @@ public class SelectedItemCollection {
     public boolean remove(Item item) {
         boolean removed = mItems.remove(item);
         // 数据发生变化，就回调
+        notifyRemoveItem(item);
         if (onSelectChanageListener != null)
             onSelectChanageListener.onUpdate(asList());
         return removed;
@@ -122,5 +125,42 @@ public class SelectedItemCollection {
 
     public interface OnSelectChanageListener {
         void onUpdate(List<Item> items);
+    }
+
+    private void notifyAddItem(Item item) {
+        if (onItemChanageListeners != null && !onItemChanageListeners.isEmpty()) {
+            for (OnItemChanageListener listener : onItemChanageListeners) {
+                listener.onAdd(item);
+            }
+        }
+    }
+
+    private void notifyRemoveItem(Item item) {
+        if (onItemChanageListeners != null && !onItemChanageListeners.isEmpty()) {
+            for (OnItemChanageListener listener : onItemChanageListeners) {
+                listener.onRemove(item);
+            }
+        }
+    }
+
+    private List<OnItemChanageListener> onItemChanageListeners;
+
+    public void addOnItemChanageListener(OnItemChanageListener listener) {
+        if (onItemChanageListeners == null) onItemChanageListeners = new ArrayList<>();
+        onItemChanageListeners.add(listener);
+    }
+
+    public void removeOnItemChanageListener(OnItemChanageListener listener) {
+        if (onItemChanageListeners != null) onItemChanageListeners.remove(listener);
+    }
+
+    public void clearOnItemChanageListener() {
+        if (onItemChanageListeners != null) onItemChanageListeners.clear();
+    }
+
+    public interface OnItemChanageListener {
+        void onAdd(Item item);
+
+        void onRemove(Item item);
     }
 }
