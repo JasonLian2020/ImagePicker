@@ -63,6 +63,10 @@ public class PreviewPagerAdapter extends FragmentPagerAdapter {
         mItems.addAll(items);
     }
 
+    public List<Item> getItemList() {
+        return mItems;
+    }
+
     public interface OnPrimaryItemSetListener {
         void onPrimaryItemSet(int position);
     }

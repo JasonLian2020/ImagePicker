@@ -127,9 +127,7 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
 
     private void initView() {
         viewPager = findViewById(R.id.viewPager);
-        pagerAdapter = new PreviewPagerAdapter(getSupportFragmentManager(), position -> {
-            Log.d("jason", "onPrimaryItemSet position = " + position);
-        });
+        pagerAdapter = new PreviewPagerAdapter(getSupportFragmentManager(), null);
         viewPager.addOnPageChangeListener(this);
         viewPager.setAdapter(pagerAdapter);
         //top
@@ -143,8 +141,10 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
         previewBottomLayout = findViewById(R.id.previewBottomLayout);
         initRecyclerView();
         previewImageCompleted = findViewById(R.id.previewImageCompleted);
+        previewImageCompleted.setOnClickListener(v -> clickImageCompleted());
         previewVideoLayout = findViewById(R.id.previewVideoLayout);
         previewVideoCompleted = findViewById(R.id.previewVideoCompleted);
+        previewVideoCompleted.setOnClickListener(v -> clickVideoCompleted());
     }
 
     private void initRecyclerView() {
@@ -153,7 +153,15 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
         recyclerView.setLayoutManager(layoutManager);
         adapter = new SelectedItemAdapter(null);
         adapter.setOnItemClickListener((adapter, view, position) -> {
-
+            Item clickItem = (Item) adapter.getItem(position);
+            if (clickItem == null || clickItem.equals(item)) return;
+            // 切换页面
+            List<Item> itemList = pagerAdapter.getItemList();
+            int index = itemList.indexOf(clickItem);
+            viewPager.setCurrentItem(index);
+            // 切换选中项
+            this.adapter.setSelectedItem(clickItem);
+            this.adapter.notifyDataSetChanged();
         });
         recyclerView.setAdapter(adapter);
     }
@@ -177,7 +185,7 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
     }
 
     private void updateUIByReset() {
-        // TODO:
+        // do nothing
     }
 
     private void updateUIBySelect(int position) {
@@ -203,6 +211,14 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
                 updateView(UPDATE_TYPE_ADD);
             }
         }
+    }
+
+    private void clickImageCompleted() {
+        //TODO:
+    }
+
+    private void clickVideoCompleted() {
+        //TODO:
     }
 
     private void processTopLayout(int updateType) {
