@@ -24,15 +24,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:foreground="?selectableItemBackground" />
+            android:foreground="?selectableItemBackground"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/titleNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <FrameLayout
+            android:layout_width="75dp"
+            android:layout_height="25dp"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="20dp"
-            android:text="下一步" />
+            android:layout_marginEnd="20dp">
+
+            <TextView
+                android:id="@+id/titleNext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end|center_vertical"
+                android:text="@string/image_picker_next_btn_text1"
+                android:textColor="#F772BB"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/titleNextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/picker_bg_next_selector"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </FrameLayout>
 
     </FrameLayout>
 

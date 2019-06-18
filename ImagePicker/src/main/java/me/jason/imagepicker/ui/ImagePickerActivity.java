@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.BarUtils;
 
@@ -48,6 +50,10 @@ public class ImagePickerActivity extends AppCompatActivity {
     private AlbumsSpinner mAlbumsSpinner;
     private AlbumsAdapter mAlbumsAdapter;
 
+    private ImageView titleClose;
+    private TextView titleNext;
+    private TextView titleNextNormal;
+
     @Override
     public void finish() {
         super.finish();
@@ -69,13 +75,27 @@ public class ImagePickerActivity extends AppCompatActivity {
         BarUtils.setStatusBarColor(this, statusBarColor);
 
         //view
-        findViewById(R.id.titleClose).setOnClickListener(v -> onBackPressed());
-        findViewById(R.id.titleNext).setOnClickListener(v -> clickNext());
+        titleClose = findViewById(R.id.titleClose);
+        titleClose.setOnClickListener(v -> onBackPressed());
+        titleNext = findViewById(R.id.titleNext);
+        titleNext.setOnClickListener(v -> clickNext());
+        titleNext.setVisibility(View.VISIBLE);
+        titleNextNormal = findViewById(R.id.titleNextNormal);
+        titleNextNormal.setOnClickListener(v -> clickNext());
+        titleNextNormal.setVisibility(View.GONE);
 
         //选中数据集合
         SelectedItemCollection.getInstance().onCreate(this, savedInstanceState);
         SelectedItemCollection.getInstance().setOnSelectChanageListener(items -> {
-            //TODO:
+            if (items != null && items.size() > 0) {
+                titleNext.setVisibility(View.GONE);
+                titleNextNormal.setVisibility(View.VISIBLE);
+                titleNextNormal.setText(getString(R.string.image_picker_next_btn_text2, items.size()));
+            } else {
+                titleNext.setVisibility(View.VISIBLE);
+                titleNextNormal.setVisibility(View.GONE);
+                titleNextNormal.setText("");
+            }
         });
 
         //选择弹窗初始化
