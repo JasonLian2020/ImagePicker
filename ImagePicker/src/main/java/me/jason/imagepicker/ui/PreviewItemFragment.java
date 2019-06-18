@@ -48,9 +48,7 @@ public class PreviewItemFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_preview_item, container, false);
         previewImage = rootView.findViewById(R.id.previewImage);
         previewImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-        previewImage.setSingleTapListener(() -> {
-            ToastUtils.showShort("点击了图片");
-        });
+        previewImage.setSingleTapListener(() -> clickImage());
         previewVideoBtn = rootView.findViewById(R.id.previewVideoBtn);
         previewVideoBtn.setOnClickListener(v -> {
             ToastUtils.showShort("点击了播放");
@@ -73,6 +71,12 @@ public class PreviewItemFragment extends Fragment {
             previewVideoBtn.setVisibility(View.VISIBLE);
         } else {
             previewVideoBtn.setVisibility(View.GONE);
+        }
+    }
+
+    private void clickImage() {
+        if (getActivity() instanceof PreviewItemActivity) {
+            ((PreviewItemActivity) getActivity()).autoHideToolbar();
         }
     }
 

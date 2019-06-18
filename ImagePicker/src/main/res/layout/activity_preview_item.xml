@@ -15,12 +15,13 @@
         android:layout_height="match_parent">
         <!--顶部-->
         <RelativeLayout
+            android:id="@+id/previewTopLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#66000000">
 
             <FrameLayout
-                android:id="@+id/previewTopLayout"
+                android:id="@+id/previewTitleLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/title_layout_height">
 
@@ -47,7 +48,7 @@
                 android:id="@+id/previewTips"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_below="@id/previewTopLayout"
+                android:layout_below="@id/previewTitleLayout"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"

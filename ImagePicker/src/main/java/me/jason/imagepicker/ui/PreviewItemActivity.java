@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -351,6 +352,35 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
             int count = SelectedItemCollection.getInstance().count();
             previewVideoCompleted.setEnabled(count <= 0);
         }
+    }
+
+    private boolean isHideToolbar = true;
+
+    private void autoHideToolbar(boolean isHideToolbar) {
+        if (isHideToolbar) {
+            previewTopLayout.animate()
+                    .setInterpolator(new FastOutSlowInInterpolator())
+                    .translationYBy(-previewTopLayout.getMeasuredHeight())
+                    .start();
+            previewBottomLayout.animate()
+                    .setInterpolator(new FastOutSlowInInterpolator())
+                    .translationYBy(previewBottomLayout.getMeasuredHeight())
+                    .start();
+        } else {
+            previewTopLayout.animate()
+                    .translationYBy(previewTopLayout.getMeasuredHeight())
+                    .setInterpolator(new FastOutSlowInInterpolator())
+                    .start();
+            previewBottomLayout.animate()
+                    .setInterpolator(new FastOutSlowInInterpolator())
+                    .translationYBy(-previewBottomLayout.getMeasuredHeight())
+                    .start();
+        }
+        this.isHideToolbar = !isHideToolbar;
+    }
+
+    public void autoHideToolbar() {
+        autoHideToolbar(isHideToolbar);
     }
 
     @Override
