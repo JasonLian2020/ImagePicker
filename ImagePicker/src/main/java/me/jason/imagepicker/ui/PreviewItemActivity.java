@@ -448,6 +448,10 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
             // 重置上一个页面
             PreviewItemFragment fragment = (PreviewItemFragment) pagerAdapter.instantiateItem(viewPager, prePosition);
             fragment.resetView();
+            // 重置进度
+            current.setText(R.string.preview_item_video_current_time_def);
+            total.setText(R.string.preview_item_video_total_time_def);
+            progress.setProgress(0);
             // 更新下一个页面
             updateUIBySelect(position);
         }

@@ -40,6 +40,10 @@ public class PreviewGSYVideoPlayer extends GSYVideoPlayer {
         }
     }
 
+    public void releaseListener() {
+        onInitVideoPlayerListener = null;
+    }
+
     public void setCurrentTimeTextView(TextView currentTimeTextView) {
         mCurrentTimeTextView = currentTimeTextView;
     }

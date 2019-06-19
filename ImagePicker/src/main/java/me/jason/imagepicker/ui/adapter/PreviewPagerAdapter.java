@@ -39,7 +39,7 @@ public class PreviewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return mItems == null ? null : PreviewItemFragment.newInstance(mItems.get(position));
+        return mItems == null ? null : PreviewItemFragment.newInstance(mItems.get(position), position);
     }
 
     @Override

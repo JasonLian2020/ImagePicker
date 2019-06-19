@@ -15,7 +15,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
@@ -28,16 +27,19 @@ import me.jason.imagepicker.video.PreviewGSYVideoPlayer;
 
 public class PreviewItemFragment extends Fragment {
     private static final String ARGS_ITEM = "args_item";
+    private static final String ARGS_POSITION = "args_position";
 
     private Item item;
+    private int position;
 
     private ImageViewTouch previewImage;
     private PreviewGSYVideoPlayer videoPlayer;
 
-    public static PreviewItemFragment newInstance(Item item) {
+    public static PreviewItemFragment newInstance(Item item, int position) {
         PreviewItemFragment fragment = new PreviewItemFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ARGS_ITEM, item);
+        bundle.putInt(ARGS_POSITION, position);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -47,12 +49,15 @@ public class PreviewItemFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() == null) return;
         item = getArguments().getParcelable(ARGS_ITEM);
+        position = getArguments().getInt(ARGS_POSITION);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        GSYVideoManager.releaseAllVideos();
+        if (videoPlayer != null) {
+            videoPlayer.releaseListener();
+        }
     }
 
     @Nullable
@@ -71,9 +76,9 @@ public class PreviewItemFragment extends Fragment {
             videoPlayer = new PreviewGSYVideoPlayer(getContext(), videoPlayer -> {
                 if (getActivity() instanceof PreviewItemActivity) {
                     TextView currentTextView = ((PreviewItemActivity) getActivity()).getCurrentTextView();
-                    currentTextView.setText("00:00");
+                    currentTextView.setText(R.string.preview_item_video_current_time_def);
                     TextView totalTextView = ((PreviewItemActivity) getActivity()).getTotalTextView();
-                    totalTextView.setText("00:00");
+                    totalTextView.setText(R.string.preview_item_video_total_time_def);
                     SeekBar progressBar = ((PreviewItemActivity) getActivity()).getProgressBar();
                     progressBar.setOnSeekBarChangeListener(videoPlayer);
                     progressBar.setOnTouchListener(videoPlayer);
@@ -89,7 +94,6 @@ public class PreviewItemFragment extends Fragment {
             });
             videoPlayer.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
             rootView.addView(videoPlayer);
-            Debuger.enable();
         }
         return rootView;
     }
@@ -123,18 +127,6 @@ public class PreviewItemFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (videoPlayer != null) videoPlayer.onVideoPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (videoPlayer != null) videoPlayer.onVideoResume();
-    }
-
     private void clickImage() {
         if (getActivity() instanceof PreviewItemActivity) {
             ((PreviewItemActivity) getActivity()).showLayout();
@@ -142,7 +134,9 @@ public class PreviewItemFragment extends Fragment {
     }
 
     public void resetView() {
+        Log.d("jason", "resetView: position = " + position);
         if (previewImage != null) previewImage.resetMatrix();
+        if (videoPlayer != null) GSYVideoManager.releaseAllVideos();
     }
 
     public Item getItem() {
