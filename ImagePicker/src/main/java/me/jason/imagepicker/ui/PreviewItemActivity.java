@@ -202,8 +202,10 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
         // 赋值
         PreviewItemFragment fragment = (PreviewItemFragment) pagerAdapter.instantiateItem(viewPager, position);
         item = fragment.getItem();
-        // 更新底部
+        // 更新UI
         updateView(UPDATE_TYPE_SELECT);
+        // 如果遮罩隐藏状态，需要显示
+        if (!isHideToolbar) autoHideToolbar();
     }
 
     private void clickPreviewChoose() {
@@ -354,10 +356,18 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
         }
     }
 
+    /**
+     * 记录是否隐藏遮罩
+     * <P>true表示显示状态，去执行隐藏；false表示隐藏状态，去执行显示</P>
+     */
     private boolean isHideToolbar = true;
 
-    private void autoHideToolbar(boolean isHideToolbar) {
+    /**
+     * 自动隐藏遮罩
+     */
+    public void autoHideToolbar() {
         if (isHideToolbar) {
+            //当前为显示状态，需要去执行隐藏动画
             previewTopLayout.animate()
                     .setInterpolator(new FastOutSlowInInterpolator())
                     .translationYBy(-previewTopLayout.getMeasuredHeight())
@@ -367,6 +377,7 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
                     .translationYBy(previewBottomLayout.getMeasuredHeight())
                     .start();
         } else {
+            //当前为隐藏状态，需要去执行显示动画
             previewTopLayout.animate()
                     .translationYBy(previewTopLayout.getMeasuredHeight())
                     .setInterpolator(new FastOutSlowInInterpolator())
@@ -376,11 +387,7 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
                     .translationYBy(-previewBottomLayout.getMeasuredHeight())
                     .start();
         }
-        this.isHideToolbar = !isHideToolbar;
-    }
-
-    public void autoHideToolbar() {
-        autoHideToolbar(isHideToolbar);
+        isHideToolbar = !isHideToolbar;
     }
 
     @Override

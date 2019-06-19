@@ -25,6 +25,7 @@ public class PreviewItemFragment extends Fragment {
     private Item item;
 
     private ImageViewTouch previewImage;
+    private ImageView previewVideoCover;
     private ImageView previewVideoBtn;
 
     public static PreviewItemFragment newInstance(Item item) {
@@ -49,6 +50,7 @@ public class PreviewItemFragment extends Fragment {
         previewImage = rootView.findViewById(R.id.previewImage);
         previewImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         previewImage.setSingleTapListener(() -> clickImage());
+        previewVideoCover = rootView.findViewById(R.id.previewVideoCover);
         previewVideoBtn = rootView.findViewById(R.id.previewVideoBtn);
         previewVideoBtn.setOnClickListener(v -> {
             ToastUtils.showShort("点击了播放");
@@ -59,18 +61,23 @@ public class PreviewItemFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //图片
         Point size = PhotoMetadataUtils.getBitmapSize(item.getContentUri(), getActivity());
-        if (item.isGif()) {
-            SelectionSpec.getInstance().imageEngine.loadGifImage(getContext(), size.x, size.y, previewImage, item.getContentUri());
-        } else {
-            SelectionSpec.getInstance().imageEngine.loadImage(getContext(), size.x, size.y, previewImage, item.getContentUri());
-        }
-        //播放按钮
-        if (item.isVideo()) {
-            previewVideoBtn.setVisibility(View.VISIBLE);
-        } else {
+        if (item.isImage()) {
+            //图片
+            previewImage.setVisibility(View.VISIBLE);
+            if (item.isGif()) {
+                SelectionSpec.getInstance().imageEngine.loadGifImage(getContext(), size.x, size.y, previewImage, item.getContentUri());
+            } else {
+                SelectionSpec.getInstance().imageEngine.loadImage(getContext(), size.x, size.y, previewImage, item.getContentUri());
+            }
+            previewVideoCover.setVisibility(View.GONE);
             previewVideoBtn.setVisibility(View.GONE);
+        } else {
+            //视频
+            previewImage.setVisibility(View.GONE);
+            previewVideoCover.setVisibility(View.VISIBLE);
+            SelectionSpec.getInstance().imageEngine.loadImage(getContext(), size.x, size.y, previewVideoCover, item.getContentUri());
+            previewVideoBtn.setVisibility(View.VISIBLE);
         }
     }
 
