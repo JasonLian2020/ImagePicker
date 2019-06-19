@@ -14,9 +14,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -57,6 +59,9 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
     private RecyclerView recyclerView;
     private Button previewImageCompleted;
     private LinearLayout previewVideoLayout;
+    private TextView current;
+    private TextView total;
+    private SeekBar progress;
     private Button previewVideoCompleted;
 
     private Album album;
@@ -153,6 +158,9 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
         previewImageCompleted = findViewById(R.id.previewImageCompleted);
         previewImageCompleted.setOnClickListener(v -> clickImageCompleted());
         previewVideoLayout = findViewById(R.id.previewVideoLayout);
+        current = findViewById(R.id.current);
+        total = findViewById(R.id.total);
+        progress = findViewById(R.id.progress);
         previewVideoCompleted = findViewById(R.id.previewVideoCompleted);
         previewVideoCompleted.setOnClickListener(v -> clickVideoCompleted());
     }
@@ -205,7 +213,7 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
         // 更新UI
         updateView(UPDATE_TYPE_SELECT);
         // 如果遮罩隐藏状态，需要显示
-        if (!isHideToolbar) autoHideToolbar();
+        showLayout(true);
     }
 
     private void clickPreviewChoose() {
@@ -388,6 +396,44 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
                     .start();
         }
         isHideToolbar = !isHideToolbar;
+    }
+
+    public void showLayout() {
+        showLayout(previewTopLayout.getVisibility() != View.VISIBLE);
+    }
+
+    public void showLayout(boolean isShow) {
+        if (isShow) {
+            if (previewTopLayout.getVisibility() != View.VISIBLE)
+                previewTopLayout.setVisibility(View.VISIBLE);
+            if (previewBottomLayout.getVisibility() != View.VISIBLE)
+                previewBottomLayout.setVisibility(View.VISIBLE);
+        } else {
+            if (previewTopLayout.getVisibility() != View.GONE)
+                previewTopLayout.setVisibility(View.GONE);
+            if (previewBottomLayout.getVisibility() != View.GONE)
+                previewBottomLayout.setVisibility(View.GONE);
+        }
+    }
+
+    public TextView getCurrentTextView() {
+        return current;
+    }
+
+    public TextView getTotalTextView() {
+        return total;
+    }
+
+    public SeekBar getProgressBar() {
+        return progress;
+    }
+
+    public ViewGroup getBottomContainer() {
+        return (ViewGroup) previewBottomLayout;
+    }
+
+    public ViewGroup getTopContainer() {
+        return (ViewGroup) previewTopLayout;
     }
 
     @Override

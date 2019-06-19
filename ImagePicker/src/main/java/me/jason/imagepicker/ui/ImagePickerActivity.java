@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.BarUtils;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ import me.jason.imagepicker.ui.widget.AlbumsSpinner;
 import me.jason.imagepicker.utils.CursorUtils;
 import me.jason.imagepicker.utils.PathUtils;
 import me.jason.imagepicker.utils.ThreadUtils;
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 import static me.jason.imagepicker.IntentHub.EXTRA_RESULT_FROM;
 import static me.jason.imagepicker.IntentHub.EXTRA_RESULT_SELECTED_ITEM;
@@ -73,6 +75,9 @@ public class ImagePickerActivity extends AppCompatActivity {
         }
         //状态栏颜色
         BarUtils.setStatusBarColor(this, statusBarColor);
+
+        //EXOPlayer内核，支持格式更多
+        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
 
         //view
         titleClose = findViewById(R.id.titleClose);

@@ -3,20 +3,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <it.sephiroth.android.library.imagezoom.ImageViewTouch
-        android:id="@+id/previewImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ImageView
-        android:id="@+id/previewVideoCover"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ImageView
-        android:id="@+id/previewVideoBtn"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
-        android:src="@drawable/preview_icon_video_play_mask" />
 </FrameLayout>
