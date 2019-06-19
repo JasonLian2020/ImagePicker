@@ -14,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 import me.jason.imagepicker.R;
@@ -66,65 +64,63 @@ public class PreviewItemFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_preview_item, container, false);
         if (rootView.getChildCount() > 0) rootView.removeAllViews();
         if (item.isImage()) {
-            previewImage = new ImageViewTouch(getContext());
-            previewImage.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
-            previewImage.setBackgroundColor(Color.BLACK);
-            previewImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-            previewImage.setSingleTapListener(() -> clickImage());
+            previewImage = initImageView();
             rootView.addView(previewImage);
         } else {
-            videoPlayer = new PreviewGSYVideoPlayer(getContext(), videoPlayer -> {
-                if (getActivity() instanceof PreviewItemActivity) {
-                    TextView currentTextView = ((PreviewItemActivity) getActivity()).getCurrentTextView();
-                    currentTextView.setText(R.string.preview_item_video_current_time_def);
-                    TextView totalTextView = ((PreviewItemActivity) getActivity()).getTotalTextView();
-                    totalTextView.setText(R.string.preview_item_video_total_time_def);
-                    SeekBar progressBar = ((PreviewItemActivity) getActivity()).getProgressBar();
-                    progressBar.setOnSeekBarChangeListener(videoPlayer);
-                    progressBar.setOnTouchListener(videoPlayer);
-                    progressBar.setProgress(0);
-                    ViewGroup bottomContainer = ((PreviewItemActivity) getActivity()).getBottomContainer();
-                    ViewGroup topContainer = ((PreviewItemActivity) getActivity()).getTopContainer();
-                    videoPlayer.setCurrentTimeTextView(currentTextView);
-                    videoPlayer.setTotalTimeTextView(totalTextView);
-                    videoPlayer.setProgressBar(progressBar);
-                    videoPlayer.setBottomContainer(bottomContainer);
-                    videoPlayer.setTopContainer(topContainer);
-                }
-            });
-            videoPlayer.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
+            videoPlayer = initVideoPlayer();
             rootView.addView(videoPlayer);
         }
         return rootView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    private ImageViewTouch initImageView() {
+        ImageViewTouch previewImage = new ImageViewTouch(getContext());
+        previewImage.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
+        previewImage.setBackgroundColor(Color.BLACK);
+        previewImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+        previewImage.setSingleTapListener(() -> clickImage());
         Point size = PhotoMetadataUtils.getBitmapSize(item.getContentUri(), getActivity());
-        if (item.isImage()) {
-            //图片
-            if (item.isGif()) {
-                SelectionSpec.getInstance().imageEngine.loadGifImage(getContext(), size.x, size.y, previewImage, item.getContentUri());
-            } else {
-                SelectionSpec.getInstance().imageEngine.loadImage(getContext(), size.x, size.y, previewImage, item.getContentUri());
-            }
+        if (item.isGif()) {
+            SelectionSpec.getInstance().imageEngine.loadGifImage(getContext(), size.x, size.y, previewImage, item.getContentUri());
         } else {
-            //视频
-            //增加封面
-            ImageView imageView = new ImageView(getContext());
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
-            SelectionSpec.getInstance().imageEngine.loadImage(getContext(), size.x, size.y, imageView, item.getContentUri());
-            videoPlayer.setThumbImageView(imageView);
-            //是否可以滑动调整
-            videoPlayer.setIsTouchWiget(false);
-            String path = PathUtils.getPath(getContext(), item.getContentUri());
-            String url = "file://" + path;
-            Log.d("jason", "path = " + path);
-            Log.d("jason", "url = " + url);
-            videoPlayer.setUp(url, false, null);
-            videoPlayer.startPlayLogic();
+            SelectionSpec.getInstance().imageEngine.loadImage(getContext(), size.x, size.y, previewImage, item.getContentUri());
         }
+        return previewImage;
+    }
+
+    private PreviewGSYVideoPlayer initVideoPlayer() {
+        PreviewGSYVideoPlayer gsyVideoPlayer = new PreviewGSYVideoPlayer(getContext(), videoPlayer -> {
+            if (getActivity() instanceof PreviewItemActivity) {
+                TextView currentTextView = ((PreviewItemActivity) getActivity()).getCurrentTextView();
+                currentTextView.setText(R.string.preview_item_video_current_time_def);
+                TextView totalTextView = ((PreviewItemActivity) getActivity()).getTotalTextView();
+                totalTextView.setText(R.string.preview_item_video_total_time_def);
+                SeekBar progressBar = ((PreviewItemActivity) getActivity()).getProgressBar();
+                progressBar.setOnSeekBarChangeListener(videoPlayer);
+                progressBar.setOnTouchListener(videoPlayer);
+                progressBar.setProgress(0);
+                ViewGroup bottomContainer = ((PreviewItemActivity) getActivity()).getBottomContainer();
+                ViewGroup topContainer = ((PreviewItemActivity) getActivity()).getTopContainer();
+                videoPlayer.setCurrentTimeTextView(currentTextView);
+                videoPlayer.setTotalTimeTextView(totalTextView);
+                videoPlayer.setProgressBar(progressBar);
+                videoPlayer.setBottomContainer(bottomContainer);
+                videoPlayer.setTopContainer(topContainer);
+            }
+        });
+        gsyVideoPlayer.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
+        //增加封面
+        Point size = PhotoMetadataUtils.getBitmapSize(item.getContentUri(), getActivity());
+        ImageView imageView = new ImageView(getContext());
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
+        SelectionSpec.getInstance().imageEngine.loadImage(getContext(), size.x, size.y, imageView, item.getContentUri());
+        gsyVideoPlayer.setThumbImageView(imageView);
+        //是否可以滑动调整
+        gsyVideoPlayer.setIsTouchWiget(false);
+        String path = PathUtils.getPath(getContext(), item.getContentUri());
+        String url = "file://" + path;
+        gsyVideoPlayer.setUp(url, false, null);
+        return gsyVideoPlayer;
     }
 
     private void clickImage() {
@@ -135,8 +131,28 @@ public class PreviewItemFragment extends Fragment {
 
     public void resetView() {
         Log.d("jason", "resetView: position = " + position);
-        if (previewImage != null) previewImage.resetMatrix();
-        if (videoPlayer != null) GSYVideoManager.releaseAllVideos();
+        if (item == null) return;
+        if (item.isImage()) {
+            if (previewImage != null) previewImage.resetMatrix();
+        } else {
+            if (videoPlayer != null) {
+                if (videoPlayer.isInPlayingState()) {
+                    videoPlayer.onVideoPause();
+                }
+                videoPlayer.releaseListener();
+                videoPlayer = null;
+            }
+        }
+    }
+
+    public void restartInitView() {
+        Log.d("jason", "restartInitView: position = " + position);
+        if (item == null) return;
+        if (item.isImage()) {
+            // do nothing
+        } else {
+            videoPlayer = initVideoPlayer();
+        }
     }
 
     public Item getItem() {

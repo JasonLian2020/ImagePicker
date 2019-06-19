@@ -22,6 +22,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.shuyu.gsyvideoplayer.utils.Debuger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +126,7 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
             }
         });
         mAlbumMediaCollection.load(album);
+        Debuger.enable();
     }
 
     @Override
@@ -210,6 +212,7 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
         // 赋值
         PreviewItemFragment fragment = (PreviewItemFragment) pagerAdapter.instantiateItem(viewPager, position);
         item = fragment.getItem();
+        fragment.restartInitView();
         // 更新UI
         updateView(UPDATE_TYPE_SELECT);
         // 如果遮罩隐藏状态，需要显示
