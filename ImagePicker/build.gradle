@@ -35,4 +35,7 @@ dependencies {
     implementation rootProject.ext.dependencies["BRVAH"]
     implementation rootProject.ext.dependencies["utilcode"]
     implementation rootProject.ext.dependencies["imagezoom"]
+    //GSYVideoPlayer
+    implementation rootProject.ext.dependencies["GSYVideoPlayer-java"]
+    implementation rootProject.ext.dependencies["GSYVideoPlayer-exo2"]
 }

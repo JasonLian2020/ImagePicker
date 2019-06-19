@@ -14,7 +14,8 @@ ext {
             butterknifeSdkVersion     : "8.8.1",
             espressoSdkVersion        : "3.0.1",
             canarySdkVersion          : "1.5.4",
-            constraintLayoutSdkVersion: "1.1.3"
+            constraintLayoutSdkVersion: "1.1.3",
+            gsyVideoPlayerSdkVersion  : "6.0.3"
     ]
 
     dependencies = [
@@ -51,6 +52,8 @@ ext {
             "arouter"                  : "com.alibaba:arouter-api:1.4.1",
             "arouter-compiler"         : "com.alibaba:arouter-compiler:1.2.2",
             "multidex"                 : "com.android.support:multidex:1.0.3",
+            "GSYVideoPlayer-java"      : "com.shuyu:gsyVideoPlayer-java:${version["gsyVideoPlayerSdkVersion"]}",
+            "GSYVideoPlayer-exo2"      : "com.shuyu:GSYVideoPlayer-exo2:${version["gsyVideoPlayerSdkVersion"]}",
 
             //test
             "junit"                    : "junit:junit:4.12",
