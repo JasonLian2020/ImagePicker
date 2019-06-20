@@ -29,6 +29,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.Set;
 
 import me.jason.imagepicker.engine.ImageEngine;
+import me.jason.imagepicker.internal.entity.CaptureStrategy;
 import me.jason.imagepicker.internal.entity.SelectionSpec;
 import me.jason.imagepicker.ui.ImagePickerActivity;
 
@@ -99,6 +100,11 @@ public final class SelectionCreator {
 
     public SelectionCreator capture(boolean enable) {
         mSelectionSpec.capture = enable;
+        return this;
+    }
+
+    public SelectionCreator captureStrategy(CaptureStrategy captureStrategy) {
+        mSelectionSpec.captureStrategy = captureStrategy;
         return this;
     }
 

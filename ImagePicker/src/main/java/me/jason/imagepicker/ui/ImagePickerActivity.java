@@ -32,6 +32,7 @@ import me.jason.imagepicker.internal.model.SelectedItemCollection;
 import me.jason.imagepicker.ui.adapter.AlbumsAdapter;
 import me.jason.imagepicker.ui.widget.AlbumsSpinner;
 import me.jason.imagepicker.utils.CursorUtils;
+import me.jason.imagepicker.utils.MediaStoreCompat;
 import me.jason.imagepicker.utils.PathUtils;
 import me.jason.imagepicker.utils.ThreadUtils;
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
@@ -42,12 +43,14 @@ import static me.jason.imagepicker.IntentHub.EXTRA_RESULT_SELECTED_PATH;
 import static me.jason.imagepicker.IntentHub.EXTRA_RESULT_SELECTED_URI;
 import static me.jason.imagepicker.IntentHub.FROM_IMAGE;
 import static me.jason.imagepicker.IntentHub.FROM_NONE;
+import static me.jason.imagepicker.IntentHub.FROM_VDIEO;
 
 public class ImagePickerActivity extends AppCompatActivity {
-    private final AlbumCollection mAlbumCollection = new AlbumCollection();
-
     public static final int REQUEST_CODE_PREVIEW = 23;
     public static final int REQUEST_CODE_CAPTURE = 24;
+
+    private final AlbumCollection mAlbumCollection = new AlbumCollection();
+    private MediaStoreCompat mMediaStoreCompat;
 
     private AlbumsSpinner mAlbumsSpinner;
     private AlbumsAdapter mAlbumsAdapter;
@@ -75,6 +78,14 @@ public class ImagePickerActivity extends AppCompatActivity {
         }
         //状态栏颜色
         BarUtils.setStatusBarColor(this, statusBarColor);
+
+        //初始化
+        if (SelectionSpec.getInstance().capture) {
+            mMediaStoreCompat = new MediaStoreCompat(this);
+            if (SelectionSpec.getInstance().captureStrategy == null)
+                throw new RuntimeException("Don't forget to set CaptureStrategy.");
+            mMediaStoreCompat.setCaptureStrategy(SelectionSpec.getInstance().captureStrategy);
+        }
 
         //EXOPlayer内核，支持格式更多
         PlayerFactory.setPlayManager(Exo2PlayerManager.class);
@@ -172,23 +183,37 @@ public class ImagePickerActivity extends AppCompatActivity {
         if (resultCode != RESULT_OK) return;
         switch (requestCode) {
             case REQUEST_CODE_CAPTURE:
-                //TODO:
+                processResultForCapture(data);
                 break;
             case REQUEST_CODE_PREVIEW:
-                if (data == null) return;
-                ArrayList<Item> selectedItems = data.getParcelableArrayListExtra(EXTRA_RESULT_SELECTED_ITEM);
-                int from = data.getIntExtra(EXTRA_RESULT_FROM, FROM_NONE);
-                ArrayList<Uri> selectedUris = new ArrayList<>();
-                ArrayList<String> selectedPaths = new ArrayList<>();
-                if (selectedItems != null) {
-                    for (Item selectedItem : selectedItems) {
-                        selectedUris.add(selectedItem.getContentUri());
-                        selectedPaths.add(PathUtils.getPath(this, selectedItem.getContentUri()));
-                    }
-                }
-                sendResult(selectedUris, selectedPaths, from);
+                processResultForPreview(data);
                 break;
         }
+    }
+
+    private void processResultForCapture(@Nullable Intent data) {
+        Uri contentUri = mMediaStoreCompat.getCurrentPhotoUri();
+        String path = mMediaStoreCompat.getCurrentPhotoPath();
+        ArrayList<Uri> selectedUris = new ArrayList<>();
+        ArrayList<String> selectedPaths = new ArrayList<>();
+        selectedPaths.add(path);
+        selectedUris.add(contentUri);
+        sendResult(selectedUris, selectedPaths, FROM_VDIEO);
+    }
+
+    private void processResultForPreview(@Nullable Intent data) {
+        if (data == null) return;
+        ArrayList<Item> selectedItems = data.getParcelableArrayListExtra(EXTRA_RESULT_SELECTED_ITEM);
+        int from = data.getIntExtra(EXTRA_RESULT_FROM, FROM_NONE);
+        ArrayList<Uri> selectedUris = new ArrayList<>();
+        ArrayList<String> selectedPaths = new ArrayList<>();
+        if (selectedItems != null) {
+            for (Item selectedItem : selectedItems) {
+                selectedUris.add(selectedItem.getContentUri());
+                selectedPaths.add(PathUtils.getPath(this, selectedItem.getContentUri()));
+            }
+        }
+        sendResult(selectedUris, selectedPaths, from);
     }
 
     private void sendResult(ArrayList<Uri> selectedUris, ArrayList<String> selectedPaths, int from) {
@@ -260,5 +285,11 @@ public class ImagePickerActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.container, fragment, ImagePickerFragment.class.getSimpleName())
                 .commitAllowingStateLoss();
+    }
+
+    public void imageCapture() {
+        if (mMediaStoreCompat != null) {
+            mMediaStoreCompat.dispatchCaptureIntent(this, REQUEST_CODE_CAPTURE);
+        }
     }
 }

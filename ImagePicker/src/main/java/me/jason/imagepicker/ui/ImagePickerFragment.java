@@ -144,13 +144,7 @@ public class ImagePickerFragment extends Fragment implements SelectedItemCollect
             if (item == null) return;
             if (item.isCapture()) {
                 //拍照
-                int count = SelectedItemCollection.getInstance().count();
-                if (count > 0) {
-                    ToastUtils.showShort(R.string.image_picker_camera_tips1);
-                } else {
-                    //TODO:
-                    ToastUtils.showShort("拍照功能开发中...");
-                }
+                clickImageCapture();
             } else if (item.isImage()) {
                 //预览照片
                 PreviewItemActivity.startForResult(getActivity(), album, item, ImagePickerActivity.REQUEST_CODE_PREVIEW);
@@ -172,5 +166,16 @@ public class ImagePickerFragment extends Fragment implements SelectedItemCollect
     private void updateUIByReset() {
         Log.d("jason", "updateUIByReset");
         mAdapter.setNewData(null);
+    }
+
+    private void clickImageCapture() {
+        int count = SelectedItemCollection.getInstance().count();
+        if (count > 0) {
+            ToastUtils.showShort(R.string.image_picker_camera_tips1);
+            return;
+        }
+        if (getActivity() instanceof ImagePickerActivity) {
+            ((ImagePickerActivity) getActivity()).imageCapture();
+        }
     }
 }

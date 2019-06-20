@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -33,7 +32,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import me.jason.imagepicker.internal.entity.CaptureStrategy;
@@ -83,18 +81,13 @@ public class MediaStoreCompat {
 
             if (photoFile != null) {
                 mCurrentPhotoPath = photoFile.getAbsolutePath();
-                mCurrentPhotoUri = FileProvider.getUriForFile(mContext.get(),
-                        mCaptureStrategy.authority, photoFile);
-                captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
-                captureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    List<ResolveInfo> resInfoList = context.getPackageManager()
-                            .queryIntentActivities(captureIntent, PackageManager.MATCH_DEFAULT_ONLY);
-                    for (ResolveInfo resolveInfo : resInfoList) {
-                        String packageName = resolveInfo.activityInfo.packageName;
-                        context.grantUriPermission(packageName, mCurrentPhotoUri,
-                                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    mCurrentPhotoUri = FileProvider.getUriForFile(mContext.get(), mCaptureStrategy.authority, photoFile);
+                    captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
+                    captureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                } else {
+                    mCurrentPhotoUri = Uri.fromFile(photoFile);
+                    captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
                 }
                 if (mFragment != null) {
                     mFragment.get().startActivityForResult(captureIntent, requestCode);
