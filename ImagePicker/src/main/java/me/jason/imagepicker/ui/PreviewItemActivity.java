@@ -22,7 +22,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,12 +126,12 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
             }
         });
         mAlbumMediaCollection.load(album);
-        Debuger.enable();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
         viewPager.removeOnPageChangeListener(this);
         mAlbumMediaCollection.onDestroy();
     }
@@ -237,7 +237,6 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
     }
 
     private void clickImageCompleted() {
-        Intent intent = new Intent();
         int count = SelectedItemCollection.getInstance().count();
         ArrayList<Item> itemList;
         if (count > 0) {
@@ -246,14 +245,21 @@ public class PreviewItemActivity extends AppCompatActivity implements ViewPager.
             itemList = new ArrayList<>();
             itemList.add(item);
         }
-        intent.putParcelableArrayListExtra(IntentHub.EXTRA_RESULT_SELECTED_ITEM, itemList);
-        intent.putExtra(IntentHub.EXTRA_RESULT_FROM, IntentHub.FROM_IMAGE);
-        setResult(RESULT_OK, intent);
-        finish();
+        sendResult(itemList, IntentHub.FROM_IMAGE);
     }
 
     private void clickVideoCompleted() {
-        //TODO:
+        ArrayList<Item> itemList = new ArrayList<>();
+        itemList.add(item);
+        sendResult(itemList, IntentHub.FROM_VDIEO);
+    }
+
+    private void sendResult(ArrayList<Item> selectedItems, int from) {
+        Intent intent = new Intent();
+        intent.putParcelableArrayListExtra(IntentHub.EXTRA_RESULT_SELECTED_ITEM, selectedItems);
+        intent.putExtra(IntentHub.EXTRA_RESULT_FROM, from);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void processTopLayout(int updateType) {
