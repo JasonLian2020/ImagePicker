@@ -400,11 +400,11 @@ public class PreviewGSYVideoPlayer extends GSYVideoPlayer {
         } else if (mStartButton instanceof ImageView) {
             ImageView imageView = (ImageView) mStartButton;
             if (mCurrentState == CURRENT_STATE_PLAYING) {
-                imageView.setImageResource(com.shuyu.gsyvideoplayer.R.drawable.video_click_pause_selector);
+                imageView.setImageResource(R.drawable.video_click_pause_selector);
             } else if (mCurrentState == CURRENT_STATE_ERROR) {
-                imageView.setImageResource(com.shuyu.gsyvideoplayer.R.drawable.video_click_error_selector);
+                imageView.setImageResource(R.drawable.video_click_error_selector);
             } else {
-                imageView.setImageResource(com.shuyu.gsyvideoplayer.R.drawable.video_click_play_selector);
+                imageView.setImageResource(R.drawable.video_click_play_selector);
             }
         }
     }

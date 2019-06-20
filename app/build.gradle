@@ -33,6 +33,16 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation rootProject.ext.dependencies["appcompat-v7"]
     implementation rootProject.ext.dependencies["multidex"]
-    implementation project(":ImagePicker")
     implementation 'com.github.bumptech.glide:glide:4.8.0'
+    //GSYVideoPlayer
+    api rootProject.ext.dependencies["GSYVideoPlayer-java"]
+    api rootProject.ext.dependencies["GSYVideoPlayer-exo2"]
+    //RxPermissions2
+    api rootProject.ext.dependencies["rxjava2"]
+    api(rootProject.ext.dependencies["rxpermissions2"]) {
+        exclude module: 'rxjava'
+        exclude module: 'support-annotations'
+    }
+    //ImagePicker
+    api project(":ImagePicker")
 }
