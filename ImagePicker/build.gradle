@@ -39,8 +39,8 @@ dependencies {
     implementation rootProject.ext.dependencies["GSYVideoPlayer-java"]
     implementation rootProject.ext.dependencies["GSYVideoPlayer-exo2"]
     //RxPermissions2
-    implementation rootProject.ext.dependencies["rxjava2"]
-    implementation(rootProject.ext.dependencies["rxpermissions2"]) {
+    api rootProject.ext.dependencies["rxjava2"]
+    api(rootProject.ext.dependencies["rxpermissions2"]) {
         exclude module: 'rxjava'
         exclude module: 'support-annotations'
     }
