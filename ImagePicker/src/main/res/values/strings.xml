@@ -17,6 +17,8 @@
     <string name="image_picker_next_btn_text1">下一步</string>
     <string name="image_picker_next_btn_text2">下一步(%1$d)</string>
 
+    <string name="image_picker_camera_tips1">选中图片时无法拍摄</string>
+
     <string name="preview_item_video_tips1">选择图片时，不能选择视频</string>
     <string name="preview_item_video_tips2">只支持上传大于%1$d秒的视频哦</string>
     <string name="preview_item_video_current_time_def">00:00</string>

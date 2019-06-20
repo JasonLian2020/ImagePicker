@@ -6,13 +6,16 @@
     <ImageView
         android:id="@+id/mediaCover"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/public_icon_camera_background" />
 
     <ImageView
         android:id="@+id/mediaIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:src="@drawable/public_icon_camera" />
 
     <!--蒙板-->
     <ImageView

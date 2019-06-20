@@ -68,7 +68,8 @@ public class AlbumMeidaAdapter extends BaseQuickAdapter<Item, BaseViewHolder> {
     }
 
     private void handleCapture(BaseViewHolder helper, Item item) {
-
+        int count = SelectedItemCollection.getInstance().count();
+        helper.setGone(R.id.mediaMask, count > 0);
     }
 
     private int getImageResize() {

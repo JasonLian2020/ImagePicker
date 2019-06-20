@@ -144,7 +144,13 @@ public class ImagePickerFragment extends Fragment implements SelectedItemCollect
             if (item == null) return;
             if (item.isCapture()) {
                 //拍照
-                ToastUtils.showShort("拍照功能开发中...");
+                int count = SelectedItemCollection.getInstance().count();
+                if (count > 0) {
+                    ToastUtils.showShort(R.string.image_picker_camera_tips1);
+                } else {
+                    //TODO:
+                    ToastUtils.showShort("拍照功能开发中...");
+                }
             } else if (item.isImage()) {
                 //预览照片
                 PreviewItemActivity.startForResult(getActivity(), album, item, ImagePickerActivity.REQUEST_CODE_PREVIEW);
