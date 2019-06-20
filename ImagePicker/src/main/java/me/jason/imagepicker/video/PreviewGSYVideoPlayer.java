@@ -233,6 +233,8 @@ public class PreviewGSYVideoPlayer extends GSYVideoPlayer {
     protected void changeUiToPauseShow() {
         Debuger.printfLog("changeUiToPauseShow");
 
+        cancelProgressTimer();// 取消计时器
+
         setViewShowState(mTopContainer, VISIBLE);
         setViewShowState(mBottomContainer, VISIBLE);
         setViewShowState(mStartButton, VISIBLE);
@@ -323,6 +325,9 @@ public class PreviewGSYVideoPlayer extends GSYVideoPlayer {
 
     protected void changeUiToPauseClear() {
         Debuger.printfLog("changeUiToPauseClear");
+
+        cancelProgressTimer();// 取消计时器
+
         changeUiToClear();
         setViewShowState(mBottomProgressBar, VISIBLE);
         updatePauseCover();
