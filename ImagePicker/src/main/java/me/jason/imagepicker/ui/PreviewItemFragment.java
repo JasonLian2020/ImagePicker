@@ -1,11 +1,9 @@
 package me.jason.imagepicker.ui;
 
-import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +15,14 @@ import android.widget.TextView;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 import me.jason.imagepicker.R;
+import me.jason.imagepicker.base.BaseLazyFragment;
 import me.jason.imagepicker.internal.entity.Item;
 import me.jason.imagepicker.internal.entity.SelectionSpec;
 import me.jason.imagepicker.utils.PathUtils;
 import me.jason.imagepicker.utils.PhotoMetadataUtils;
 import me.jason.imagepicker.video.PreviewGSYVideoPlayer;
 
-public class PreviewItemFragment extends Fragment {
+public class PreviewItemFragment extends BaseLazyFragment {
     private static final String ARGS_ITEM = "args_item";
     private static final String ARGS_POSITION = "args_position";
 
@@ -58,10 +57,31 @@ public class PreviewItemFragment extends Fragment {
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_preview_item, container, false);
+    public void onPause() {
+        super.onPause();
+        Log.d("GSYVideoPlayer", "onPause: position = " + position);
+        if (item == null) return;
+        if (item.isImage()) {
+            // do nothing
+        } else {
+            if (videoPlayer != null) {
+                if (videoPlayer.isInPlayingState()) {
+                    videoPlayer.onVideoPause();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected View initView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_preview_item, container, false);
+    }
+
+    @Override
+    protected void initViewConfig(ViewGroup rootView) {
+        Log.d("GSYVideoPlayer", "initViewConfig: position = " + position);
+        if (rootView == null) return;
         if (rootView.getChildCount() > 0) rootView.removeAllViews();
         if (item.isImage()) {
             previewImage = initImageView();
@@ -70,13 +90,16 @@ public class PreviewItemFragment extends Fragment {
             videoPlayer = initVideoPlayer();
             rootView.addView(videoPlayer);
         }
-        return rootView;
+    }
+
+    @Override
+    protected void initData() {
+
     }
 
     private ImageViewTouch initImageView() {
         ImageViewTouch previewImage = new ImageViewTouch(getContext());
         previewImage.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
-        previewImage.setBackgroundColor(Color.BLACK);
         previewImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         previewImage.setSingleTapListener(() -> clickImage());
         Point size = PhotoMetadataUtils.getBitmapSize(item.getContentUri(), getActivity());
@@ -130,7 +153,7 @@ public class PreviewItemFragment extends Fragment {
     }
 
     public void resetView() {
-        Log.d("jason", "resetView: position = " + position);
+        Log.d("GSYVideoPlayer", "resetView: position = " + position);
         if (item == null) return;
         if (item.isImage()) {
             if (previewImage != null) previewImage.resetMatrix();
@@ -139,20 +162,12 @@ public class PreviewItemFragment extends Fragment {
                 if (videoPlayer.isInPlayingState()) {
                     videoPlayer.onVideoPause();
                 }
-                videoPlayer.releaseListener();
-                videoPlayer = null;
             }
         }
     }
 
     public void restartInitView() {
-        Log.d("jason", "restartInitView: position = " + position);
-        if (item == null) return;
-        if (item.isImage()) {
-            // do nothing
-        } else {
-            videoPlayer = initVideoPlayer();
-        }
+        Log.d("GSYVideoPlayer", "restartInitView: position = " + position);
     }
 
     public Item getItem() {
