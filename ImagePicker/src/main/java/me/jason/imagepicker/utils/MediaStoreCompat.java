@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -83,12 +84,14 @@ public class MediaStoreCompat {
                 mCurrentPhotoPath = photoFile.getAbsolutePath();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     mCurrentPhotoUri = FileProvider.getUriForFile(mContext.get(), mCaptureStrategy.authority, photoFile);
-                    captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
                     captureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 } else {
                     mCurrentPhotoUri = Uri.fromFile(photoFile);
-                    captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
                 }
+                //设置拍照后图片保存的位置
+                captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
+                //设置图片保存的格式
+                captureIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
                 if (mFragment != null) {
                     mFragment.get().startActivityForResult(captureIntent, requestCode);
                 } else {

@@ -1,5 +1,6 @@
 package me.jason.imagepicker.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,7 +19,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.BarUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,6 +197,9 @@ public class ImagePickerActivity extends AppCompatActivity {
     private void processResultForCapture(@Nullable Intent data) {
         Uri contentUri = mMediaStoreCompat.getCurrentPhotoUri();
         String path = mMediaStoreCompat.getCurrentPhotoPath();
+        //通知图库更新
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+        //通知给外面
         ArrayList<Uri> selectedUris = new ArrayList<>();
         ArrayList<String> selectedPaths = new ArrayList<>();
         selectedPaths.add(path);
@@ -288,8 +294,21 @@ public class ImagePickerActivity extends AppCompatActivity {
     }
 
     public void imageCapture() {
-        if (mMediaStoreCompat != null) {
-            mMediaStoreCompat.dispatchCaptureIntent(this, REQUEST_CODE_CAPTURE);
-        }
+        new RxPermissions(this)
+                .requestEach(Manifest.permission.CAMERA)
+                .subscribe(permission -> {
+                    if (permission.granted) {
+                        //授权成功
+                        if (mMediaStoreCompat != null) {
+                            mMediaStoreCompat.dispatchCaptureIntent(this, REQUEST_CODE_CAPTURE);
+                        }
+                    } else if (permission.shouldShowRequestPermissionRationale) {
+                        //授权失败，可以再次询问
+                        ToastUtils.showShort("拒绝授权，无法拍照");
+                    } else {
+                        //授权失败，不能再次询问
+                        ToastUtils.showShort("拒绝授权，请到设置页面打开对应权限");
+                    }
+                });
     }
 }
