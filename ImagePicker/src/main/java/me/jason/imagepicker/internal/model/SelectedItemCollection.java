@@ -109,6 +109,8 @@ public class SelectedItemCollection {
     public boolean reset() {
         if (mItems == null) mItems = new LinkedHashSet<>();
         else mItems.clear();
+        if (onSelectChanageListener != null)
+            onSelectChanageListener.onUpdate(asList());
         return true;
     }
 
