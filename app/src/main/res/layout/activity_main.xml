@@ -9,37 +9,43 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:onClick="startImagePicker"
-        android:text="ImagePicker" />
+        android:text="ImagePicker"
+        android:textSize="28sp" />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:onClick="permissionStorage"
-        android:text="读写权限" />
+        android:text="读写权限"
+        android:textSize="28sp" />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:onClick="permissionCamera"
-        android:text="相机权限" />
+        android:text="相机权限"
+        android:textSize="28sp" />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:onClick="permissionAudio"
-        android:text="录音权限" />
+        android:text="录音权限"
+        android:textSize="28sp" />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:onClick="permissionTwo"
-        android:text="读写+相机权限" />
+        android:text="读写+相机权限"
+        android:textSize="28sp" />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:onClick="permissionThree"
-        android:text="读写+相机+录音权限" />
+        android:text="读写+相机+录音权限"
+        android:textSize="28sp" />
 </LinearLayout>
