@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
+    android:layout_height="100dp"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:text="@string/preview_item_video_current_time_def"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="25sp" />
 
     <SeekBar
         android:id="@+id/progress"
@@ -21,8 +22,8 @@
         android:layout_weight="1.0"
         android:background="@null"
         android:max="100"
-        android:maxHeight="4dp"
-        android:minHeight="4dp"
+        android:maxHeight="10dp"
+        android:minHeight="10dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:progressDrawable="@drawable/video_seek_progress"
@@ -34,5 +35,6 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
         android:text="@string/preview_item_video_total_time_def"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="25sp" />
 </LinearLayout>
