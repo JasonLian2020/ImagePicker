@@ -5,4 +5,11 @@
     <color name="image_picker_colorAccent">#FF4081</color>
 
     <color name="image_picker_colorPrimary_compatibility">#c7c7c7</color>
+
+    <!--ImagePicker-->
+    <color name="ip_text_main">#333333</color>
+    <color name="ip_text_second">#666666</color>
+    <color name="ip_text_third">#999999</color>
+    <color name="ip_main_color">#FE5553</color>
+    <color name="ip_preview_mask">#666666</color>
 </resources>

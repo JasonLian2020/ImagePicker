@@ -3,7 +3,6 @@ package me.jason.imagepicker.ui.adapter;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.blankj.utilcode.util.SizeUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -38,6 +37,6 @@ public class SelectedItemAdapter extends BaseQuickAdapter<Item, BaseViewHolder> 
     }
 
     private int getImageResize() {
-        return SizeUtils.dp2px(80);
+        return mContext.getResources().getDimensionPixelSize(R.dimen.ip_preview_item_height);
     }
 }

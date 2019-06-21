@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="media_grid_size">48dp</dimen>
+    <dimen name="media_grid_size">100dp</dimen>
     <dimen name="media_grid_spacing">2dp</dimen>
 
-    <dimen name="album_item_height">72dp</dimen>
+    <dimen name="album_item_height">150dp</dimen>
 
-    <dimen name="title_layout_height">48dp</dimen>
+
+    <!--ImagePicker-->
+    <dimen name="ip_title_layout_height">100dp</dimen><!--标题栏高度-->
+    <dimen name="ip_preview_item_padding">20dp</dimen>
+    <dimen name="ip_preview_item_height_inside">110dp</dimen>
+    <dimen name="ip_preview_item_height">150dp</dimen>
 </resources>
