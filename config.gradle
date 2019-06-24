@@ -37,7 +37,7 @@ ext {
             "butterknife-compiler"     : "com.jakewharton:butterknife-compiler:${version["butterknifeSdkVersion"]}",
             "roundedImageView"         : "com.makeramen:roundedimageview:2.3.0",
             "circleImageView"          : "de.hdodenhof:circleimageview:2.2.0",
-            "custom-dialog"            : "me.jason.library:custom-dialog:1.0.2",//弹窗框架
+            "custom-dialog"            : "me.jason.library:custom-dialog:1.0.3",//弹窗框架
             "BRVAH"                    : "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.45",
             "imagezoom"                : "it.sephiroth.android.library.imagezoom:library:1.0.4",
 
