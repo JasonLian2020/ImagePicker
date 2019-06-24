@@ -16,15 +16,19 @@ import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.ToastUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import me.jason.customdialog.CustomDialog;
 import me.jason.imagepicker.R;
 import me.jason.imagepicker.internal.entity.Album;
+import me.jason.imagepicker.internal.entity.CaptureItem;
 import me.jason.imagepicker.internal.entity.Item;
 import me.jason.imagepicker.internal.entity.SelectionSpec;
 import me.jason.imagepicker.internal.model.AlbumMediaCollection;
 import me.jason.imagepicker.internal.model.SelectedItemCollection;
 import me.jason.imagepicker.ui.adapter.AlbumMeidaAdapter;
+import me.jason.imagepicker.ui.adapter.ChooseCaptureAdapter;
 import me.jason.imagepicker.ui.widget.MediaGridInset;
 import me.jason.imagepicker.utils.CursorUtils;
 import me.jason.imagepicker.utils.ThreadUtils;
@@ -179,8 +183,7 @@ public class ImagePickerFragment extends Fragment implements SelectedItemCollect
         } else if (SelectionSpec.getInstance().onlyShowVideos()) {
             videoCapture();
         } else {
-            //TODO:弹窗选择
-
+            chooseCaputre();
         }
     }
 
@@ -194,5 +197,32 @@ public class ImagePickerFragment extends Fragment implements SelectedItemCollect
         if (getActivity() instanceof ImagePickerActivity) {
             ((ImagePickerActivity) getActivity()).videoCapture();
         }
+    }
+
+    CustomDialog chooseCaputreDialog;
+
+    private void chooseCaputre() {
+        List<CaptureItem> list = new ArrayList<>();
+        list.add(new CaptureItem("拍照", CaptureItem.IMAGE_CAPTURE));
+        list.add(new CaptureItem("视频", CaptureItem.VIDEO_CAPTURE));
+        ChooseCaptureAdapter captureAdapter = new ChooseCaptureAdapter(list);
+        captureAdapter.setOnItemClickListener((adapter, view, position) -> {
+            CaptureItem item = (CaptureItem) adapter.getItem(position);
+            switch (item.getCaptureType()) {
+                case CaptureItem.IMAGE_CAPTURE:
+                    if (chooseCaputreDialog != null) chooseCaputreDialog.dismiss();
+                    imageCapture();
+                    break;
+                case CaptureItem.VIDEO_CAPTURE:
+                    if (chooseCaputreDialog != null) chooseCaputreDialog.dismiss();
+                    videoCapture();
+                    break;
+            }
+        });
+        chooseCaputreDialog = new CustomDialog.Builder(getContext())
+                .adapter(captureAdapter, null)
+                .negativeText("取消")
+                .dialogType(CustomDialog.DIALOG_TYPE_LIST)
+                .show();
     }
 }
