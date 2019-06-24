@@ -89,6 +89,11 @@ public final class SelectionCreator {
         mSelectionSpec.orientation = SCREEN_ORIENTATION_UNSPECIFIED;
     }
 
+    public SelectionCreator showSingleMediaType(boolean showSingleMediaType) {
+        mSelectionSpec.showSingleMediaType = showSingleMediaType;
+        return this;
+    }
+
     public SelectionCreator maxSelectable(int maxSelectable) {
         if (maxSelectable < 1)
             throw new IllegalArgumentException("maxSelectable must be greater than or equal to one");
