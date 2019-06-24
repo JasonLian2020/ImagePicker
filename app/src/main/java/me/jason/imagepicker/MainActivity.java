@@ -23,13 +23,46 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void startImagePicker(View view) {
+    public void startAll(View view) {
         new RxPermissions(this)
                 .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(permission -> {
                     if (permission.granted) {
                         ImagePicker.from(MainActivity.this)
                                 .choose(MimeType.ofAll())
+                                .capture(true)
+                                .captureStrategy(new CaptureStrategy(true, "me.jason.imagepicker.fileprovider", ""))
+                                .imageEngine(new Glide4Engine())
+                                .forResult(101);
+                    }
+                });
+    }
+
+
+    public void startImage(View view) {
+        new RxPermissions(this)
+                .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(permission -> {
+                    if (permission.granted) {
+                        ImagePicker.from(MainActivity.this)
+                                .choose(MimeType.ofImage())
+                                .showSingleMediaType(true)
+                                .capture(true)
+                                .captureStrategy(new CaptureStrategy(true, "me.jason.imagepicker.fileprovider", ""))
+                                .imageEngine(new Glide4Engine())
+                                .forResult(101);
+                    }
+                });
+    }
+
+    public void startVideo(View view) {
+        new RxPermissions(this)
+                .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(permission -> {
+                    if (permission.granted) {
+                        ImagePicker.from(MainActivity.this)
+                                .choose(MimeType.ofVideo())
+                                .showSingleMediaType(true)
                                 .capture(true)
                                 .captureStrategy(new CaptureStrategy(true, "me.jason.imagepicker.fileprovider", ""))
                                 .imageEngine(new Glide4Engine())

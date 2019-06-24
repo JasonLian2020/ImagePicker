@@ -10,8 +10,22 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:onClick="startImagePicker"
-        android:text="ImagePicker"
+        android:onClick="startAll"
+        android:text="All"
+        android:textSize="28sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:onClick="startImage"
+        android:text="IMAGE"
+        android:textSize="28sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:onClick="startVideo"
+        android:text="VIDEO"
         android:textSize="28sp" />
 
     <Button
