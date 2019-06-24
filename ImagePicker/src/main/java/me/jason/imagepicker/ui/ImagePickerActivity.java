@@ -50,7 +50,8 @@ import static me.jason.imagepicker.IntentHub.FROM_VDIEO;
 
 public class ImagePickerActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_PREVIEW = 23;
-    public static final int REQUEST_CODE_CAPTURE = 24;
+    public static final int REQUEST_CODE_IMAGE_CAPTURE = 24;
+    public static final int REQUEST_CODE_VIDEO_CAPTURE = 25;
 
     private final AlbumCollection mAlbumCollection = new AlbumCollection();
     private MediaStoreCompat mMediaStoreCompat;
@@ -185,8 +186,11 @@ public class ImagePickerActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         switch (requestCode) {
-            case REQUEST_CODE_CAPTURE:
-                processResultForCapture(data);
+            case REQUEST_CODE_IMAGE_CAPTURE:
+                processResultForCapture(data, FROM_IMAGE);
+                break;
+            case REQUEST_CODE_VIDEO_CAPTURE:
+                processResultForCapture(data, FROM_VDIEO);
                 break;
             case REQUEST_CODE_PREVIEW:
                 processResultForPreview(data);
@@ -194,7 +198,7 @@ public class ImagePickerActivity extends AppCompatActivity {
         }
     }
 
-    private void processResultForCapture(@Nullable Intent data) {
+    private void processResultForCapture(@Nullable Intent data, int from) {
         Uri contentUri = mMediaStoreCompat.getCurrentPhotoUri();
         String path = mMediaStoreCompat.getCurrentPhotoPath();
         //通知图库更新
@@ -204,7 +208,7 @@ public class ImagePickerActivity extends AppCompatActivity {
         ArrayList<String> selectedPaths = new ArrayList<>();
         selectedPaths.add(path);
         selectedUris.add(contentUri);
-        sendResult(selectedUris, selectedPaths, FROM_VDIEO);
+        sendResult(selectedUris, selectedPaths, from);
     }
 
     private void processResultForPreview(@Nullable Intent data) {
@@ -300,11 +304,30 @@ public class ImagePickerActivity extends AppCompatActivity {
                     if (permission.granted) {
                         //授权成功
                         if (mMediaStoreCompat != null) {
-                            mMediaStoreCompat.dispatchCaptureIntent(this, REQUEST_CODE_CAPTURE);
+                            mMediaStoreCompat.dispatchImageCapture(this, REQUEST_CODE_IMAGE_CAPTURE);
                         }
                     } else if (permission.shouldShowRequestPermissionRationale) {
                         //授权失败，可以再次询问
                         ToastUtils.showShort("拒绝授权，无法拍照");
+                    } else {
+                        //授权失败，不能再次询问
+                        ToastUtils.showShort("拒绝授权，请到设置页面打开对应权限");
+                    }
+                });
+    }
+
+    public void videoCapture() {
+        new RxPermissions(this)
+                .requestEach(Manifest.permission.CAMERA)
+                .subscribe(permission -> {
+                    if (permission.granted) {
+                        //授权成功
+                        if (mMediaStoreCompat != null) {
+                            mMediaStoreCompat.dispatchVideoCapture(this, REQUEST_CODE_VIDEO_CAPTURE);
+                        }
+                    } else if (permission.shouldShowRequestPermissionRationale) {
+                        //授权失败，可以再次询问
+                        ToastUtils.showShort("拒绝授权，无法录制视频");
                     } else {
                         //授权失败，不能再次询问
                         ToastUtils.showShort("拒绝授权，请到设置页面打开对应权限");

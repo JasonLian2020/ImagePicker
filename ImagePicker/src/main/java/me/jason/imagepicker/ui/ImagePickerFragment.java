@@ -144,7 +144,7 @@ public class ImagePickerFragment extends Fragment implements SelectedItemCollect
             if (item == null) return;
             if (item.isCapture()) {
                 //拍照
-                clickImageCapture();
+                clickCapture();
             } else if (item.isImage()) {
                 //预览照片
                 PreviewItemActivity.startForResult(getActivity(), album, item, ImagePickerActivity.REQUEST_CODE_PREVIEW);
@@ -168,14 +168,31 @@ public class ImagePickerFragment extends Fragment implements SelectedItemCollect
         mAdapter.setNewData(null);
     }
 
-    private void clickImageCapture() {
+    private void clickCapture() {
         int count = SelectedItemCollection.getInstance().count();
         if (count > 0) {
             ToastUtils.showShort(R.string.image_picker_camera_tips1);
             return;
         }
+        if (SelectionSpec.getInstance().onlyShowImages()) {
+            imageCapture();
+        } else if (SelectionSpec.getInstance().onlyShowVideos()) {
+            videoCapture();
+        } else {
+            //TODO:弹窗选择
+
+        }
+    }
+
+    private void imageCapture() {
         if (getActivity() instanceof ImagePickerActivity) {
             ((ImagePickerActivity) getActivity()).imageCapture();
+        }
+    }
+
+    private void videoCapture() {
+        if (getActivity() instanceof ImagePickerActivity) {
+            ((ImagePickerActivity) getActivity()).videoCapture();
         }
     }
 }

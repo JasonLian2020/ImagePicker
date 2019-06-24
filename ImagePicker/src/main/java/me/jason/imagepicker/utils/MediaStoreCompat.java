@@ -70,7 +70,7 @@ public class MediaStoreCompat {
         mCaptureStrategy = strategy;
     }
 
-    public void dispatchCaptureIntent(Context context, int requestCode) {
+    public void dispatchImageCapture(Context context, int requestCode) {
         Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (captureIntent.resolveActivity(context.getPackageManager()) != null) {
             File photoFile = null;
@@ -101,19 +101,78 @@ public class MediaStoreCompat {
         }
     }
 
+    public void dispatchVideoCapture(Context context, int requestCode) {
+        Intent captureIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (captureIntent.resolveActivity(context.getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createVideoFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (photoFile != null) {
+                mCurrentPhotoPath = photoFile.getAbsolutePath();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    mCurrentPhotoUri = FileProvider.getUriForFile(mContext.get(), mCaptureStrategy.authority, photoFile);
+                    captureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                } else {
+                    mCurrentPhotoUri = Uri.fromFile(photoFile);
+                }
+                //设置拍照后图片保存的位置
+                captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
+                //设置图片保存的格式
+//                captureIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+                //设置拍摄的质量
+                captureIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+                if (mFragment != null) {
+                    mFragment.get().startActivityForResult(captureIntent, requestCode);
+                } else {
+                    mContext.get().startActivityForResult(captureIntent, requestCode);
+                }
+            }
+        }
+    }
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp =
-                new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = String.format("JPEG_%s.jpg", timeStamp);
         File storageDir;
         if (mCaptureStrategy.isPublic) {
-            storageDir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
+            storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             if (!storageDir.exists()) storageDir.mkdirs();
         } else {
             storageDir = mContext.get().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        }
+        if (mCaptureStrategy.directory != null) {
+            storageDir = new File(storageDir, mCaptureStrategy.directory);
+            if (!storageDir.exists()) storageDir.mkdirs();
+        }
+
+        // Avoid joining path components manually
+        File tempFile = new File(storageDir, imageFileName);
+
+        // Handle the situation that user's external storage is not ready
+        if (!Environment.MEDIA_MOUNTED.equals(EnvironmentCompat.getStorageState(tempFile))) {
+            return null;
+        }
+
+        return tempFile;
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private File createVideoFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = String.format("VID_%s.mp4", timeStamp);
+        File storageDir;
+        if (mCaptureStrategy.isPublic) {
+            storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+            if (!storageDir.exists()) storageDir.mkdirs();
+        } else {
+            storageDir = mContext.get().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
         }
         if (mCaptureStrategy.directory != null) {
             storageDir = new File(storageDir, mCaptureStrategy.directory);
