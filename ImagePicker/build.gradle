@@ -32,10 +32,13 @@ dependencies {
     implementation rootProject.ext.dependencies["appcompat-v7"]
     implementation rootProject.ext.dependencies["support-v4"]
     implementation rootProject.ext.dependencies["recyclerview-v7"]
-    implementation rootProject.ext.dependencies["BRVAH"]
     implementation rootProject.ext.dependencies["utilcode"]
     implementation rootProject.ext.dependencies["imagezoom"]
     //==============以下运行时就会不依赖，所以需要项目本来去依赖这些库，减少包体体积==============
+    //BRVAH
+    compileOnly rootProject.ext.dependencies["BRVAH"]
+    //CustomDialog
+    compileOnly rootProject.ext.dependencies["custom-dialog"]
     //GSYVideoPlayer
     compileOnly rootProject.ext.dependencies["GSYVideoPlayer-java"]
     compileOnly rootProject.ext.dependencies["GSYVideoPlayer-exo2"]
